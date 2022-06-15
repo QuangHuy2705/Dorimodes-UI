@@ -1,0 +1,36 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.bikini-home {
+  width: 100%;
+  height: 100%;
+
+  .background-header {
+    margin: 50px 0;
+    background-image: url('/images/background/slider_1.png');
+    height: 500px;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+}
+
+.bikini-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
