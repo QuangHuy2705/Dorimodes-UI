@@ -5,7 +5,7 @@ const nextConfig = {
     relay: {
       src: '~/',
     },
-  },
+  }
 }
 
 module.exports = nextConfig
