@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { Card, Button, Tooltip } from 'antd'
 import { ShoppingCartOutlined, SearchOutlined } from '@ant-design/icons'
 import DetailCategory from '../modal/DetailCategory'
+import Cart from '../modal/Cart'
 
 const { Meta } = Card;
 
@@ -21,7 +22,8 @@ const dumpData = {
 
 function Category(props) {
     const [isVisible, setVisible] = useState(false)
-    const openDetailCategory = (item) => {
+    const [isVisibleCart, setVisibleCart] = useState(false)
+    const openDetailCategory = () => {
         setVisible(true)
     }
 
@@ -29,12 +31,26 @@ function Category(props) {
         setVisible(false)
     }
 
+    const openCart = () => {
+        setVisibleCart(true)
+    }
+
+    const closeModalCart = () => {
+        setVisibleCart(false)
+    }
+
+
     return (
         <>
             <div className='category-item'>
                 <DetailCategory
                     isVisible={isVisible}
                     onClose={closeModalDetail}
+                    data={dumpData}
+                />
+                <Cart
+                    isVisible={isVisibleCart}
+                    onClose={closeModalCart}
                     data={dumpData}
                 />
                 <div>
@@ -48,7 +64,7 @@ function Category(props) {
 
                 <div className="category-action-hover">
                     <div className='action-hover'>
-                        <Tooltip title="Thêm vào giỏ hàng">
+                        <Tooltip title="Thêm vào giỏ hàng" onClick={openCart}>
                             <Button style={{ backgroundColor: 'transparent' }} icon={<ShoppingCartOutlined style={{ color: '#fff' }} />} size={'large'} />
                         </Tooltip>
                         <Tooltip title="Xem sản phẩm" placement='bottom' onClick={openDetailCategory}>
