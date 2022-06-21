@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import HomeComponent from '../components/home'
 import styles from '../styles/Home.module.css'
+import HeaderComponent from '../components/header'
 
 export default function Home() {
   return (
@@ -13,6 +14,9 @@ export default function Home() {
         <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;1,100;1,300;1,400&display=swap" />
       </Head>
       <div className={styles.main}>
+        <div className='main-header'>
+          <HeaderComponent />
+        </div>
         <HomeComponent />
       </div>
       <footer className={styles.footer}>

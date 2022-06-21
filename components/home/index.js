@@ -7,9 +7,6 @@ function HomeComponent() {
     return (
         <div className='bikini-home'>
             <Row style={{ display: 'flex', justifyContent: 'center' }}>
-                <Col span={16}>
-                    <HeaderComponent />
-                </Col>
                 <div className='background-header mt-0' />
             </Row>
             <div style={{ fontWeight: 600 }} className='flex-align-center'>

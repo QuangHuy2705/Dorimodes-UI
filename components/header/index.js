@@ -46,11 +46,11 @@ function HeaderComponent() {
                 onClose={closeModalInfo}
                 render={renderInfo()}
             />
-            <Col span={1} />
+            <Col span={5} />
             <Col span={3}>
                 <Image alt="" src='/images/logo.png' width={100} height={30} quality={100} />
             </Col>
-            <Col span={16}>
+            <Col span={12}>
                 <nav>
                     <ul>
                         <li style={{ display: 'inline-block' }}>
@@ -76,9 +76,12 @@ function HeaderComponent() {
                     </ul>
                 </nav>
             </Col>
-            <Col span={3}>
+            <Col span={2}>
                 <UserOutlined className="cart-header" onClick={openInfomation} />
-                <ShoppingCartOutlined className="cart-header ml-15" />
+                <Link href="/cart">
+                    <ShoppingCartOutlined className="cart-header ml-15" />
+                </Link>
+
             </Col>
         </Row>
     )

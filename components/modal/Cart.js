@@ -23,18 +23,23 @@ const Cart = ({ title = '', data = null, isVisible = false, onClose = null }) =>
                         <ShoppingCartOutlined style={{ color: 'rgb(5, 112, 218)', fontSize: 20 }} /> <span style={{ fontSize: 18 }}>Giỏ hàng của bạn ({'5'} sản phẩm)</span>
                     </div>
                     <table className='mt-10'>
-                        <tr>
-                            <td>SẢN PHẨM</td>
-                            <td>ĐƠN GIÁ</td>
-                            <td>SỐ LƯỢNG</td>
-                            <td>THÀNH TIỀN</td>
-                        </tr>
-                        <tr>
-                            <td>Bikini</td>
-                            <td>720</td>
-                            <td>2</td>
-                            <td>140</td>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <td>SẢN PHẨM</td>
+                                <td>ĐƠN GIÁ</td>
+                                <td>SỐ LƯỢNG</td>
+                                <td>THÀNH TIỀN</td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>Bikini</td>
+                                <td>720</td>
+                                <td>2</td>
+                                <td>140</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </Col>
                 <Col span={24} className='mt-20' style={{ textAlign: 'right' }}>

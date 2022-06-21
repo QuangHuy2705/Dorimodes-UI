@@ -15,6 +15,11 @@ const confirmation = (title = '', content = '') => {
     });
 }
 
+const convertNumber = (number) => {
+    return parseInt(number).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+}
+
 export default {
-    confirmation
+    confirmation,
+    convertNumber
 }
