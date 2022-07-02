@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux'
-// import appReducer from './app'
+import productReducer from './product'
+import categoryReducer from './category'
 
 //Wiki module
 
 const rootReducer = combineReducers({
-    // app: appReducer,
+    product: productReducer,
+    category: categoryReducer
 })
 
 export default rootReducer

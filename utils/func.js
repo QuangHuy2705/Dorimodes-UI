@@ -19,7 +19,15 @@ const convertNumber = (number) => {
     return parseInt(number).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
 }
 
+const notificationAlert = (type = 'success', title = '', content = '') => {
+    notification[type]({
+        message: { title },
+        description: { content }
+    });
+}
+
 export default {
     confirmation,
-    convertNumber
+    convertNumber,
+    notificationAlert
 }

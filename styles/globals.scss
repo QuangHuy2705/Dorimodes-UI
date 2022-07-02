@@ -16,10 +16,14 @@ a {
 
 $color-black: #333;
 $color-blue: rgb(5, 112, 218);
+$color-blue-blur: rgb(18, 129, 240);
+$color-green-select: rgb(140, 184, 152);
 $color-green: rgb(7, 164, 54);
 $color-blue-black: rgb(6, 30, 90);
 $color-solid: rgb(223, 226, 237);
 $color-red: rgb(243, 61, 5);
+$color-grey: #efefef;
+$color-yellow: rgb(254, 242, 5);
 
 .g-color-black {
   color: $color-black;
@@ -39,6 +43,42 @@ $color-red: rgb(243, 61, 5);
 
 .g-color-red {
   color: $color-red
+}
+
+.g-color-grey {
+  color: $color-grey
+}
+
+.g-color-yellow {
+  color: $color-yellow
+}
+
+.g-background-black {
+  background: $color-black;
+}
+
+.g-background-blue {
+  background: $color-blue;
+}
+
+.g-background-green {
+  background: $color-green;
+}
+
+.g-background-blue-black {
+  background: $color-blue-black;
+}
+
+.g-background-red {
+  background: $color-red
+}
+
+.g-background-grey {
+  background: $color-grey
+}
+
+.g-background-yellow {
+  background: $color-yellow
 }
 
 .ml-15 {
@@ -65,6 +105,10 @@ $color-red: rgb(243, 61, 5);
   margin-top: 20px;
 }
 
+.mt-30 {
+  margin-top: 30px;
+}
+
 .pt-10 {
   padding-top: 10px;
 }
@@ -75,6 +119,14 @@ $color-red: rgb(243, 61, 5);
 
 .fw-600 {
   font-weight: 600;
+}
+
+.fw-400 {
+  font-weight: 400;
+}
+
+.fs-14 {
+  font-size: 14px;
 }
 
 .fs-16 {
@@ -100,6 +152,12 @@ $color-red: rgb(243, 61, 5);
 .flex-align-center {
   display: flex;
   justify-content: center;
+}
+
+.flex-center-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .border-bottom-width {
