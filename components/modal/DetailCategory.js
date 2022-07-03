@@ -1,8 +1,10 @@
 import { Button, Modal, Col, Row, InputNumber } from 'antd';
 import React, { useState } from 'react';
 import { CheckOutlined } from '@ant-design/icons'
+import { getLanguage } from '../../utils/laguage';
 
 const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = null, locale = 'pl' }) => {
+    const t = getLanguage()
     const [quantity, setQuantity] = useState(1)
     const [size, setSize] = useState(null)
     const [color, setColor] = useState(null)
@@ -54,7 +56,7 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                 <Col span={12} >
                     <b className='fs-20'>{data.name[locale]}</b>
                     <div className='mt-5'>
-                        Trạng thái: <Button type='primary' size='small' icon={<CheckOutlined />}>Còn hàng</Button>
+                        {t.DETAIL.status}: <Button type='primary' size='small' icon={<CheckOutlined />}>Còn hàng</Button>
                     </div>
                     <div className='fs-22 g-color-blue mt-20'>
                         {data.price} PLZ
@@ -67,7 +69,7 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                     {
                         data.color && data.color.length > 0 &&
                         <>
-                            Màu&nbsp;&nbsp;&nbsp;{data.color.map((c, idx) => {
+                            {t.DETAIL.color}&nbsp;&nbsp;&nbsp;{data.color.map((c, idx) => {
                                 return <Button
                                     className='btn-select-option'
                                     icon={(color && color === c) ? <CheckOutlined style={{ color: 'rgb(7, 164, 54)' }} /> : null}
@@ -83,7 +85,7 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                     {
                         data.size && data.size.length > 0 &&
                         <>
-                            Size&nbsp;&nbsp;&nbsp;{data.size.map((s, idx) => {
+                            {t.DETAIL.size}&nbsp;&nbsp;&nbsp;{data.size.map((s, idx) => {
                                 return <Button
                                     className='btn-select-option'
                                     key={idx}
@@ -97,14 +99,15 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                         </>
                     }
                     <div>
-                        Số lượng: <InputNumber
+                        {t.DETAIL.quantity}: <InputNumber
                             min={1}
                             max={10}
                             value={quantity}
                             style={{ width: 60 }}
                             onChange={onChange}
                             className="custom-input"
-                        />&nbsp;&nbsp;&nbsp;&nbsp;<button className='btn-order-category' >Thêm vào giỏ hàng</button>
+                        />&nbsp;&nbsp;&nbsp;&nbsp;<button className='btn-order-category'
+                            disabled={!color || !size}>{t.DETAIL.addToCart}</button>
                     </div>
                 </Col>
             </Row>

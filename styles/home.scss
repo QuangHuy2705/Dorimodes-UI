@@ -140,6 +140,11 @@
     }
 }
 
+button[disabled=disabled],
+button:disabled {
+    cursor: not-allowed;
+}
+
 .table-cart {
     table {
         width: 100%;

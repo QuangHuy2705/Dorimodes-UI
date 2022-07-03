@@ -45,5 +45,12 @@ export default {
         },
         submit: 'Gửi thông tin',
         warning: 'Quý khách hàng vui lòng thanh toán sau đó gửi thông tin để chúng tôi có thể phục vụ quý khách'
+    },
+    DETAIL: {
+        status: 'Trạng thái',
+        color: 'Màu',
+        size: 'Size',
+        quantity: 'Số lượng',
+        addToCart: 'Thêm vào giỏ hàng',
     }
 };

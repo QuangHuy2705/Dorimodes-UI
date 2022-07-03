@@ -45,5 +45,12 @@ export default {
         },
         submit: 'Submit',
         warning: 'Please pay then send information so we can serve you'
+    },
+    DETAIL: {
+        status: 'Status',
+        color: 'Color',
+        size: 'Size',
+        quantity: 'Quantity',
+        addToCart: 'Add to Cart',
     }
 };
