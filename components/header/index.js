@@ -10,12 +10,11 @@ import { Actions } from '../../redux/reducers/product'
 import { Actions as ActionCategory } from '../../redux/reducers/category'
 
 import { useRouter } from "next/router";
-import en from '../../locales/en'
-import vn from '../../locales/vn'
+import { getLanguage } from '../../utils/laguage'
 
 function HeaderComponent() {
     const { locale, locales, asPath } = useRouter();
-    const t = locale === 'en' ? en : vn;
+    const t = getLanguage();
 
     const [isVisible, setVisible] = useState(false)
     const openInfomation = () => {
@@ -39,22 +38,22 @@ function HeaderComponent() {
     const renderInfo = () => {
         return (
             <div className="modal-infomation">
-                <div className='title'>THÔNG TIN CHỦ CỬA HÀNG</div>
+                <div className='title'>{t.MODAL_INFO.title}</div>
                 <Timeline>
-                    <Timeline.Item color="green">Họ và tên:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'Lê Viết Khang'}</span></Timeline.Item>
+                    <Timeline.Item color="green">{t.MODAL_INFO.fullname}:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'Lê Viết Khang'}</span></Timeline.Item>
                     <Timeline.Item color="green">
-                        Số tài khoản:&nbsp;&nbsp;
+                        {t.MODAL_INFO.accountNumber}:&nbsp;&nbsp;
                         <span className="fw-500 g-color-blue-black">{'038005888678'}</span> <br />
                         <div style={{ marginLeft: 20 }}>
-                            Ngân hàng:&nbsp;&nbsp;
+                            {t.MODAL_INFO.nameOfBank}:&nbsp;&nbsp;
                             <span className="fw-500 g-color-blue-black">{'VietComBank'}</span> <br />
-                            Tên chủ tài khoản:&nbsp;&nbsp;
+                            {t.MODAL_INFO.accountName}:&nbsp;&nbsp;
                             <span className="fw-500 g-color-blue-black">{'Lê Viết Khang'}</span> <br />
-                            Chi nhánh:&nbsp;&nbsp;
+                            {t.MODAL_INFO.branchName}:&nbsp;&nbsp;
                             <span className="fw-500 g-color-blue-black">{'Nam Kỳ Khởi Nghĩa - Quận 1 - TPHCM'}</span> <br />
                         </div>
                     </Timeline.Item>
-                    <Timeline.Item color="green">Địa chỉ:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'3 Lê Văn Huân - Tân Bình - TPHCM'}</span></Timeline.Item>
+                    <Timeline.Item color="green">{t.MODAL_INFO.address}:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'3 Lê Văn Huân - Tân Bình - TPHCM'}</span></Timeline.Item>
                 </Timeline>
             </div>
         )
@@ -76,17 +75,17 @@ function HeaderComponent() {
                     <ul>
                         <li style={{ display: 'inline-block' }}>
                             <Link href="/">
-                                {t.home}
+                                {t.HOME.home}
                             </Link>
                         </li>
                         <li>
                             <Link href="/products">
-                                {t.category}
+                                {t.HOME.products}
                             </Link>
                         </li>
                         <li>
-                            <Link href="/blog/hello-world">
-                                VỀ CHÚNG TÔI
+                            <Link href="/">
+                                {t.HOME.aboutUs}
                             </Link>
                         </li>
                     </ul>

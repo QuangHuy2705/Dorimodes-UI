@@ -3,16 +3,8 @@ import Image from 'next/image'
 import HomeComponent from '../components/home'
 import styles from '../styles/Home.module.css'
 import HeaderComponent from '../components/header'
-import { useRouter } from 'next/router';
-
-import en from '../locales/en'
-import vi from '../locales/vi'
 
 export default function Home() {
-
-  const router = useRouter();
-  const { locale } = router;
-  const t = locale === 'en-US' ? en : vi;
 
   return (
     <div className={styles.container}>

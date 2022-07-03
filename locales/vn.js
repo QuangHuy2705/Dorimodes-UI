@@ -1,4 +1,49 @@
 export default {
-    home: 'TRANG CHỦ',
-    category: 'SẢN PHẨM'
+    HOME: {
+        home: 'TRANG CHỦ',
+        products: 'SẢN PHẨM',
+        aboutUs: 'VỀ CHÚNG TÔI',
+        outstanding: 'Sản phẩm nổi bật'
+    },
+    MODAL_INFO: {
+        title: 'THÔNG TIN CHỦ CỬA HÀNG',
+        fullname: 'Họ và tên',
+        accountNumber: 'Số tài khoản',
+        nameOfBank: 'Ngân hàng',
+        accountName: 'Tên chủ tài khoản',
+        branchName: 'Chi nhánh',
+        address: 'Địa chỉ',
+    },
+    PRODUCTS: {
+        allProductsTitle: 'TẤT CẢ SẢN PHẨM',
+        home: 'Trang chủ',
+        allProducts: 'Tất cả sản phẩm',
+        sortBy: 'Sắp xếp theo giá',
+        default: 'Mặc định',
+        category: 'Danh mục',
+        lowToHigh: 'Từ thấp tới cao',
+        hightToLow: 'Từ cao tới thấp',
+        size: 'THEO KÍCH THƯỚC',
+        color: 'THEO MÀU SẮC',
+    },
+    CART: {
+        yourCart: 'Giỏ hàng của bạn',
+        products: 'sản phẩm',
+        table: {
+            product: 'SẢN PHẨM',
+            unitPrice: 'ĐƠN GIÁ',
+            quantity: 'SỐ LƯỢNG',
+            intoMoney: 'THÀNH TIỀN'
+        },
+        totalPrice: 'Tổng tiền',
+        content: 'Vui lòng thanh toán và gửi xác nhận để mua hàng',
+        form: {
+            fullname: 'Họ và tên',
+            phone: 'Số điện thoạ',
+            address: 'Địa chỉ',
+            totalPurchase: 'Số tiền thanh toán',
+        },
+        submit: 'Gửi thông tin',
+        warning: 'Quý khách hàng vui lòng thanh toán sau đó gửi thông tin để chúng tôi có thể phục vụ quý khách'
+    }
 };

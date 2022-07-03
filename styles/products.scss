@@ -23,7 +23,6 @@
 
     .container {
         .category-item {
-            padding: 10px 0;
             border-bottom: 1px solid $color-solid;
         }
 
@@ -42,20 +41,27 @@
             }
 
             .isChoose {
-                border: 1px solid $color-blue-blur !important;
+                border: 2px solid $color-green-select !important;
             }
         }
 
-        .item-collaps {
-            margin-left: 20px;
-            margin-right: 20px;
-            border-bottom: 1px solid $color-solid;
-            cursor: pointer;
+        .parent-collaps {
+            .item-collaps {
+                margin-left: 20px;
+                margin-right: 20px;
+                border-bottom: 1px solid $color-solid;
+                cursor: pointer;
 
-            &:hover {
-                color: $color-blue;
+                &:hover {
+                    color: $color-blue-blur;
+                }
+            }
+
+            .isSelect {
+                color: $color-blue
             }
         }
+
     }
 
     .custom-select-sort {

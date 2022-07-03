@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react'
 import Category from '../category'
-import { Row, Col, Divider } from 'antd'
+import { Row, Col, Divider, Empty, Spin } from 'antd'
 import { useSelector, useDispatch } from 'react-redux'
+import { getLanguage } from '../../utils/laguage'
 
 function HomeComponent() {
-
+    const t = getLanguage()
     const {
-        products
+        products,
+        isFetching
     } = useSelector(state => state.product)
 
     return (
@@ -17,25 +19,29 @@ function HomeComponent() {
             <div style={{ fontWeight: 600 }} className='flex-align-center'>
                 HOT DEAL
             </div>
-            <Divider plain>Sản phẩm nổi bật ngày hôm nay</Divider>
-            <Row className='flex-align-center'>
-                <div className='container'>
-                    <Row gutter={[30, 45]}>
-                        {
-                            (products || []).map((item, idx) => {
-                                return <Col sm={6} xs={24} key={item.id}>
-                                    <Category data={idx % 2 === 0 ? item : {
-                                        ...item,
-                                        image: [
-                                            'https://product.hstatic.net/1000329192/product/upload_68d6b7ef5f954ebbb910addf29b706f0_grande.jpg'
-                                        ]
-                                    }} />
-                                </Col>
-                            })
-                        }
-                    </Row>
-                </div>
-            </Row>
+            <Divider plain>{t.HOME.outstanding}</Divider>
+            <Spin spinning={isFetching}>
+                <Row className='flex-align-center'>
+                    <div className='container'>
+                        <Row gutter={[30, 45]}>
+                            {
+                                (products || []).map((item, idx) => {
+                                    return <Col sm={6} xs={24} key={item.id}>
+                                        <Category data={idx % 2 === 0 ? item : {
+                                            ...item,
+                                            image: [
+                                                'https://product.hstatic.net/1000329192/product/upload_68d6b7ef5f954ebbb910addf29b706f0_grande.jpg'
+                                            ]
+                                        }} />
+                                    </Col>
+                                })
+                            }
+                        </Row>
+                        <div className='text-align-center '> {(!products || products.length === 0) && < Empty />}</div>
+                    </div>
+                </Row>
+            </Spin>
+
         </div>
     )
 }

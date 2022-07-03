@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Breadcrumb, Row, Col, Select, Checkbox, Collapse } from 'antd';
+import { Breadcrumb, Row, Col, Select, Checkbox, Collapse, Empty, Spin } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux'
 import { Actions } from '../../redux/reducers/product'
 import Category from '../category'
 import { useRouter } from "next/router";
+import { getLanguage } from '../../utils/laguage';
 import _ from 'lodash'
 
 const { Option } = Select;
@@ -40,11 +41,17 @@ const COLOR_CONFIGS = [
 ]
 
 function Products() {
+    const t = getLanguage();
     const { locale } = useRouter();
     const [productsSort, setProductSort] = useState([])
     const [arrCatrgories, setArrCatrgories] = useState([])
+    const [filters, setFilters] = useState({
+        color: [],
+        size: [],
+        category: []
+    })
     const [optionSort, setOptionSort] = useState(0)
-    const { products } = useSelector(state => state.product)
+    const { products, isFetching } = useSelector(state => state.product)
     const dispatch = useDispatch()
     const { categories } = useSelector(state => state.category)
 
@@ -54,7 +61,7 @@ function Products() {
 
     useEffect(() => {
         function loadHandleCategories() {
-            if (categories.length > 0) {
+            if (categories && categories.length > 0) {
                 const processed = categories.reduce((acc, curr) => {
                     if (!curr.parent) {
                         if (!acc[curr.id]) {
@@ -85,7 +92,7 @@ function Products() {
         loadHandleCategories()
     }, [categories])
 
-    const handleChange = (value) => {
+    const handleSortChange = (value) => {
         if (products && products.length > 0) {
             if (value === 1) {
                 setProductSort(_.orderBy(products, 'price', 'asc'))
@@ -100,21 +107,65 @@ function Products() {
         setOptionSort(value)
     }
 
-    const onFilterProduct = () => {
-        console.log("vào đây")
-        dispatch(Actions.getProductFiltersRequest({ color: ['red'] }))
+    const filterWithCategory = (idCat) => {
+        let tmpCat = filters.category
+        if (filters.category.length && filters.category[0] === idCat) {
+            tmpCat = []
+        } else {
+            tmpCat = [idCat]
+        }
+        setFilters({
+            ...filters,
+            category: tmpCat
+        })
+        callApiFilters({
+            ...filters,
+            category: tmpCat
+        })
+    }
+
+    const onFilterProduct = (idColor) => {
+        let tmpColors = filters.color;
+        if (filters.color.includes(idColor)) {
+            tmpColors = filters.color.filter(item => item !== idColor)
+        } else {
+            tmpColors = [...filters.color, idColor]
+        }
+        setFilters({
+            ...filters,
+            color: tmpColors
+        })
+        callApiFilters({
+            ...filters,
+            color: tmpColors
+        })
+    }
+
+    const onFilterSize = (listSize) => {
+        setFilters({
+            ...filters,
+            size: listSize
+        })
+        callApiFilters({
+            ...filters,
+            size: listSize
+        })
+    }
+
+    const callApiFilters = (params) => {
+        dispatch(Actions.getProductFiltersRequest(params))
     }
 
     return (
         <div className='wrapper-product-container'>
             <div className='banner-content'>
                 <div className='content-text'>
-                    TẤT CẢ SẢN PHẨM
+                    {t.PRODUCTS.allProductsTitle}
                 </div>
                 <Breadcrumb>
-                    <Breadcrumb.Item>Trag chủ</Breadcrumb.Item>
+                    <Breadcrumb.Item>{t.PRODUCTS.home}</Breadcrumb.Item>
                     <Breadcrumb.Item>
-                        <a>Tất cả sản phẩm</a>
+                        <a>{t.PRODUCTS.allProducts}</a>
                     </Breadcrumb.Item>
                 </Breadcrumb>
             </div>
@@ -122,7 +173,7 @@ function Products() {
                 <Row>
                     <Col span={6} style={{ paddingRight: 25 }}>
                         <div className='fs-18 fw-600'>
-                            DANH MỤC
+                            {t.PRODUCTS.category}
                         </div>
                         <Collapse
                             bordered={false}
@@ -138,69 +189,81 @@ function Products() {
                                         item.children && _.isArray(item.children)
                                         && item.children.map(chil => {
                                             return (
-                                                <p key={chil.id} className="fs-16 fw-400 item-collaps">{chil.name[locale]}</p>
+                                                <p
+                                                    onClick={() => filterWithCategory(chil.id)}
+                                                    key={chil.id}
+                                                    className={`fs-16 fw-400 item-collaps ${!_.isEmpty(filters.category) && filters.category[0] === chil.id ? 'isSelect' : ''}`}>
+                                                    {chil.name[locale]}
+                                                </p>
                                             )
                                         })
                                     }
                                 </Panel>
                             })
                             }
-
                         </Collapse>
                         <div className='fs-18 fw-600 mt-30'>
-                            THEO KÍCH THƯỚC
+                            {t.PRODUCTS.size}
                         </div>
                         <div className='mt-20'>
-                            <Checkbox.Group style={{ width: '100%' }} >
+                            <Checkbox.Group style={{ width: '100%' }} value={filters.size} onChange={onFilterSize}>
                                 <Row gutter={[0, 10]}>
                                     <Col span={12}>
-                                        <Checkbox value="A">S</Checkbox>
+                                        <Checkbox value="s">S</Checkbox>
                                     </Col>
                                     <Col span={12}>
-                                        <Checkbox value="B">L</Checkbox>
+                                        <Checkbox value="l">L</Checkbox>
                                     </Col>
                                     <Col span={12}>
-                                        <Checkbox value="M">M</Checkbox>
+                                        <Checkbox value="m">M</Checkbox>
                                     </Col>
                                     <Col span={12}>
-                                        <Checkbox value="XL">XL</Checkbox>
+                                        <Checkbox value="xl">XL</Checkbox>
                                     </Col>
                                 </Row>
                             </Checkbox.Group>
                         </div>
                         <div className='fs-18 fw-600 mt-30'>
-                            THEO MÀU SẮC
+                            {t.PRODUCTS.color}
                         </div>
                         <div className='mt-20 group-color'>
                             {COLOR_CONFIGS.map(item => {
-                                return <div onClick={onFilterProduct} key={item._id} className={`item-color ${item.attribute}`} />
+                                return <div
+                                    onClick={() => onFilterProduct(item._id)}
+                                    key={item._id}
+                                    className={`item-color ${filters.color.includes(item._id) ? 'isChoose' : ''} ${item.attribute}`}
+
+                                />
                             })}
                         </div>
                     </Col>
                     <Col span={18}>
                         <div className='flex-center-right'>
-                            Sắp xếp theo giá
-                            <Select className='custom-select-sort' style={{ width: 180 }} value={optionSort} onChange={handleChange}>
-                                <Option value={0}>Mặc đinh</Option>
-                                <Option value={1}>Từ thấp đến cao</Option>
-                                <Option value={2}>Từ cao tới thấp</Option>
+                            {t.PRODUCTS.sortBy}
+                            <Select className='custom-select-sort' style={{ width: 180 }} value={optionSort} onChange={handleSortChange}>
+                                <Option value={0}>{t.PRODUCTS.default}</Option>
+                                <Option value={1}>{t.PRODUCTS.lowToHigh}</Option>
+                                <Option value={2}>{t.PRODUCTS.hightToLow}</Option>
                             </Select>
                         </div>
                         <div className='border-bottom-width' />
-                        <Row gutter={[30, 45]}>
-                            {
-                                (productsSort || []).map((item, idx) => {
-                                    return <Col sm={8} xs={24} key={item.id}>
-                                        <Category data={idx % 2 === 0 ? item : {
-                                            ...item,
-                                            image: [
-                                                'https://product.hstatic.net/1000329192/product/upload_417931e07fbc4adda593b39aca66d405_grande.jpg'
-                                            ]
-                                        }} />
-                                    </Col>
-                                })
-                            }
-                        </Row>
+                        <Spin spinning={isFetching}>
+                            <Row gutter={[30, 45]}>
+                                {
+                                    (productsSort || []).map((item, idx) => {
+                                        return <Col sm={8} xs={24} key={item.id}>
+                                            <Category data={idx % 2 === 0 ? item : {
+                                                ...item,
+                                                image: [
+                                                    'https://product.hstatic.net/1000329192/product/upload_417931e07fbc4adda593b39aca66d405_grande.jpg'
+                                                ]
+                                            }} />
+                                        </Col>
+                                    })
+                                }
+                            </Row>
+                            <div className='text-align-center '> {(!products || products.length === 0) && < Empty />}</div>
+                        </Spin>
                     </Col>
                 </Row>
             </div>

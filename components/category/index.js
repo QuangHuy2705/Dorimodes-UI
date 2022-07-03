@@ -29,10 +29,6 @@ function Category(props) {
         setVisibleCart(true)
     }
 
-    const closeModalCart = () => {
-        setVisibleCart(false)
-    }
-
 
     return (
         <>
@@ -42,11 +38,6 @@ function Category(props) {
                     onClose={closeModalDetail}
                     data={data}
                 // locale={locale}
-                />
-                <Cart
-                    isVisible={isVisibleCart}
-                    onClose={closeModalCart}
-                    data={data}
                 />
                 <div>
                     <img

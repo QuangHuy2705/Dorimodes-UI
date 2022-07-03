@@ -26,6 +26,10 @@ const notificationAlert = (type = 'success', title = '', content = '') => {
     });
 }
 
+const addToCart = () => {
+
+}
+
 export default {
     confirmation,
     convertNumber,
