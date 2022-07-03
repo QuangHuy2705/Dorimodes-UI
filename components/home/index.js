@@ -27,12 +27,7 @@ function HomeComponent() {
                             {
                                 (products || []).map((item, idx) => {
                                     return <Col sm={6} xs={24} key={item.id}>
-                                        <Category data={idx % 2 === 0 ? item : {
-                                            ...item,
-                                            image: [
-                                                'https://product.hstatic.net/1000329192/product/upload_68d6b7ef5f954ebbb910addf29b706f0_grande.jpg'
-                                            ]
-                                        }} />
+                                        <Category data={item} />
                                     </Col>
                                 })
                             }

@@ -26,9 +26,21 @@ const notificationAlert = (type = 'success', title = '', content = '') => {
     });
 }
 
-const addToCart = () => {
+const KEY_CART_STORAGE = 'KEY_CART_STORAGE'
 
+const addToCart = (data) => {
+    const nomarlize = {
+        product: {
+            id: data.id,
+            size: data.size,
+            color: data.color,
+            quantity: data.quantity
+        }
+    }
+    localStorage.setItem(KEY_CART_STORAGE, data)
 }
+
+
 
 export default {
     confirmation,

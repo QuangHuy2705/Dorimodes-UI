@@ -3,6 +3,29 @@ import React, { useState } from 'react';
 import { CheckOutlined } from '@ant-design/icons'
 
 const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = null, locale = 'pl' }) => {
+    const [quantity, setQuantity] = useState(1)
+    const [size, setSize] = useState(null)
+    const [color, setColor] = useState(null)
+
+    const onChange = (value) => {
+        setQuantity(value)
+    };
+
+    const handleChooseColor = (colorU) => {
+        if (colorU === color) {
+            setColor(null)
+        } else {
+            setColor(colorU)
+        }
+    }
+
+    const handleChooseSize = (sizeU) => {
+        if (sizeU === size) {
+            setSize(null)
+        } else {
+            setSize(sizeU)
+        }
+    }
 
     return (
         <Modal
@@ -34,7 +57,7 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                         Trạng thái: <Button type='primary' size='small' icon={<CheckOutlined />}>Còn hàng</Button>
                     </div>
                     <div className='fs-22 g-color-blue mt-20'>
-                        {data.price} $
+                        {data.price} PLZ
                     </div>
                     <div className='border-bottom-width' />
                     <div className='g-color-black'>
@@ -44,13 +67,14 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                     {
                         data.color && data.color.length > 0 &&
                         <>
-                            Màu&nbsp;&nbsp;&nbsp;{data.color.map((color, idx) => {
+                            Màu&nbsp;&nbsp;&nbsp;{data.color.map((c, idx) => {
                                 return <Button
                                     className='btn-select-option'
-                                    icon={<CheckOutlined style={{ color: 'rgb(7, 164, 54)' }} />}
+                                    icon={(color && color === c) ? <CheckOutlined style={{ color: 'rgb(7, 164, 54)' }} /> : null}
                                     key={idx}
+                                    onClick={() => handleChooseColor(c)}
                                 >
-                                    {color}
+                                    {c}
                                 </Button>
                             })}
                             <div className='border-bottom-width' />
@@ -59,13 +83,14 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                     {
                         data.size && data.size.length > 0 &&
                         <>
-                            Size&nbsp;&nbsp;&nbsp;{data.size.map((size, idx) => {
+                            Size&nbsp;&nbsp;&nbsp;{data.size.map((s, idx) => {
                                 return <Button
                                     className='btn-select-option'
                                     key={idx}
-                                    icon={<CheckOutlined style={{ color: 'rgb(7, 164, 54)' }} />}
+                                    icon={(size && size === s) ? <CheckOutlined style={{ color: 'rgb(7, 164, 54)' }} /> : null}
+                                    onClick={() => handleChooseSize(s)}
                                 >
-                                    {size}
+                                    {s}
                                 </Button>
                             })}
                             <div className='border-bottom-width' />
@@ -75,8 +100,10 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                         Số lượng: <InputNumber
                             min={1}
                             max={10}
-                            style={{ width: 50 }}
-                            defaultValue={1}
+                            value={quantity}
+                            style={{ width: 60 }}
+                            onChange={onChange}
+                            className="custom-input"
                         />&nbsp;&nbsp;&nbsp;&nbsp;<button className='btn-order-category' >Thêm vào giỏ hàng</button>
                     </div>
                 </Col>

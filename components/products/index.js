@@ -252,12 +252,7 @@ function Products() {
                                 {
                                     (productsSort || []).map((item, idx) => {
                                         return <Col sm={8} xs={24} key={item.id}>
-                                            <Category data={idx % 2 === 0 ? item : {
-                                                ...item,
-                                                image: [
-                                                    'https://product.hstatic.net/1000329192/product/upload_417931e07fbc4adda593b39aca66d405_grande.jpg'
-                                                ]
-                                            }} />
+                                            <Category data={item} />
                                         </Col>
                                     })
                                 }

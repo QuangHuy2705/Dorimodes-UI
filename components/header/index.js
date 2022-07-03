@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Row, Col, Timeline } from 'antd'
+import { Row, Col, Timeline, Badge } from 'antd'
 import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons'
 import Infomation from '../modal/Infomation'
 
@@ -94,7 +94,9 @@ function HeaderComponent() {
             <Col sm={2} xs={16}>
                 <UserOutlined className="cart-header" onClick={openInfomation} />
                 <Link href="/cart">
-                    <ShoppingCartOutlined className="cart-header ml-15" />
+                    <Badge count={5} overflowCount={9}>
+                        <ShoppingCartOutlined className="cart-header ml-15" />
+                    </Badge>
                 </Link>
             </Col>
             <Col sm={4} xs={8}>
