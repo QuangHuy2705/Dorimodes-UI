@@ -21,29 +21,68 @@ const convertNumber = (number) => {
 
 const notificationAlert = (type = 'success', title = '', content = '') => {
     notification[type]({
-        message: { title },
-        description: { content }
+        message: title,
+        description: content
     });
 }
 
 const KEY_CART_STORAGE = 'KEY_CART_STORAGE'
 
-const addToCart = (data) => {
-    const nomarlize = {
-        product: {
-            id: data.id,
-            size: data.size,
-            color: data.color,
-            quantity: data.quantity
-        }
+const getCartCurrent = () => {
+    if (typeof window !== 'undefined') {
+        return JSON.parse(localStorage.getItem(KEY_CART_STORAGE))
     }
-    localStorage.setItem(KEY_CART_STORAGE, data)
+    return
 }
 
+const addToCart = (data) => {
+    try {
+        let stored = getCartCurrent()
+        if (!stored) {
+            stored = []
+        }
+        const nomarlize = {
+            id: data.id,
+            size: data.size || null,
+            color: data.color || null,
+            quantity: data.quantity || null,
+            name: data.name,
+            price: data.price | 0
+        }
+        stored.push(nomarlize)
+        localStorage.setItem(KEY_CART_STORAGE, JSON.stringify(stored))
+    } catch (error) {
 
+    }
+}
+
+const removeItemFromCart = (id) => {
+    try {
+        let stored = getCartCurrent()
+        if (!stored) {
+            return;
+        }
+        const arrTmp = stored.filter(item => item.id !== id)
+        localStorage.setItem(KEY_CART_STORAGE, JSON.stringify(arrTmp))
+    } catch (error) {
+
+    }
+}
+
+const removeAllCart = () => {
+    try {
+        localStorage.removeItem(KEY_CART_STORAGE)
+    } catch (error) {
+
+    }
+}
 
 export default {
     confirmation,
     convertNumber,
-    notificationAlert
+    notificationAlert,
+    addToCart,
+    getCartCurrent,
+    removeItemFromCart,
+    removeAllCart
 }

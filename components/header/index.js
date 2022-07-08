@@ -8,15 +8,42 @@ import Infomation from '../modal/Infomation'
 import { useSelector, useDispatch } from 'react-redux'
 import { Actions } from '../../redux/reducers/product'
 import { Actions as ActionCategory } from '../../redux/reducers/category'
+import { Actions as ActionCart } from '../../redux/reducers/cart'
 
 import { useRouter } from "next/router";
 import { getLanguage } from '../../utils/laguage'
+import func from '../../utils/func'
+import _ from 'lodash'
 
 function HeaderComponent() {
-    const { locale, locales, asPath } = useRouter();
     const t = getLanguage();
-
+    const { locale, locales, asPath } = useRouter();
+    const [countItems, setCountItems] = useState([])
     const [isVisible, setVisible] = useState(false)
+
+    const dispatch = useDispatch()
+    const {
+        carts
+    } = useSelector(item => item.cart)
+
+    useEffect(() => {
+        const cartsSult = func.getCartCurrent()
+        function loadData() {
+            dispatch(Actions.getProductRequest())
+            dispatch(ActionCategory.getCategoryRequest())
+            if (!_.isEmpty(cartsSult)) {
+                dispatch(ActionCart.loadCart(cartsSult))
+            }
+        }
+        loadData()
+    }, [])
+
+    useEffect(() => {
+        if (!_.isEmpty(carts)) {
+            setCountItems(carts)
+        }
+    }, [carts])
+
     const openInfomation = () => {
         setVisible(true)
     }
@@ -24,16 +51,6 @@ function HeaderComponent() {
     const closeModalInfo = () => {
         setVisible(false)
     }
-
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        function getData() {
-            dispatch(Actions.getProductRequest())
-            dispatch(ActionCategory.getCategoryRequest())
-        }
-        getData()
-    }, [])
 
     const renderInfo = () => {
         return (
@@ -68,7 +85,9 @@ function HeaderComponent() {
             />
             <Col sm={2} xs={0} />
             <Col sm={3} xs={24}>
-                <Image alt="" src='/images/logo.png' width={100} height={30} quality={100} />
+                <Link href="/">
+                    <Image style={{ cursor: 'pointer' }} alt="" src='/images/logo.png' width={100} height={30} quality={100} />
+                </Link>
             </Col>
             <Col sm={12} xs={24}>
                 <nav>
@@ -84,7 +103,7 @@ function HeaderComponent() {
                             </Link>
                         </li>
                         <li>
-                            <Link href="/">
+                            <Link href="/about">
                                 {t.HOME.aboutUs}
                             </Link>
                         </li>
@@ -94,7 +113,7 @@ function HeaderComponent() {
             <Col sm={2} xs={16}>
                 <UserOutlined className="cart-header" onClick={openInfomation} />
                 <Link href="/cart">
-                    <Badge count={5} overflowCount={9}>
+                    <Badge count={!_.isEmpty(countItems) ? countItems.length : null} overflowCount={9}>
                         <ShoppingCartOutlined className="cart-header ml-15" />
                     </Badge>
                 </Link>

@@ -95,10 +95,10 @@ function Products() {
     const handleSortChange = (value) => {
         if (products && products.length > 0) {
             if (value === 1) {
-                setProductSort(_.orderBy(products, 'price', 'asc'))
+                setProductSort(_.orderBy(products, (o) => parseFloat(o.price), ['asc']))
             }
             if (value === 2) {
-                setProductSort(_.orderBy(products, 'price', 'desc'))
+                setProductSort(_.orderBy(products, (o) => parseFloat(o.price), ['desc']))
             }
             if (value === 0) {
                 setProductSort(products)

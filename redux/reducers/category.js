@@ -9,7 +9,7 @@ const { Types, Creators: Actions } = createActions(
         getCategorySuccess: ['data'],
         getCategoryFailure: ['error'],
     },
-    { prefix: '@PRODUCT/' }
+    { prefix: '@CATEGORY/' }
 )
 
 export { Types, Actions }

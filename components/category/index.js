@@ -3,20 +3,21 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Button, Tooltip } from 'antd'
 import { ShoppingCartOutlined, SearchOutlined } from '@ant-design/icons'
+import { Actions } from '../../redux/reducers/cart'
+import { useDispatch } from 'react-redux'
 import DetailCategory from '../modal/DetailCategory'
-import Cart from '../modal/Cart'
 import { useRouter } from "next/router";
+import func from '../../utils/func'
 
 function Category(props) {
 
     const { locale } = useRouter();
-
+    const dispatch = useDispatch();
     const {
         data
     } = props;
 
     const [isVisible, setVisible] = useState(false)
-    const [isVisibleCart, setVisibleCart] = useState(false)
     const openDetailCategory = () => {
         setVisible(true)
     }
@@ -25,10 +26,30 @@ function Category(props) {
         setVisible(false)
     }
 
-    const openCart = () => {
-        setVisibleCart(true)
+    const onAddToCart = () => {
+        const dataCart = {
+            id: data.id,
+            size: data.size[0] || null,
+            color: data.color[0] | null,
+            quantity: 1,
+            name: data.name,
+            price: data.price | 0
+        }
+        dispatch(Actions.addToCart(dataCart))
     }
 
+    const onAddToCartDetail = (data) => {
+        const dataCart = {
+            id: data.id,
+            size: data.size || null,
+            color: data.color | null,
+            quantity: data.quantity | 1,
+            name: data.name,
+            price: data.price | 0
+        }
+        dispatch(Actions.addToCart(dataCart))
+        closeModalDetail()
+    }
 
     return (
         <>
@@ -37,7 +58,8 @@ function Category(props) {
                     isVisible={isVisible}
                     onClose={closeModalDetail}
                     data={data}
-                // locale={locale}
+                    onAddToCartDetail={onAddToCartDetail}
+                    locale={locale}
                 />
                 <div>
                     <img
@@ -50,7 +72,7 @@ function Category(props) {
 
                 <div className="category-action-hover">
                     <div className='action-hover'>
-                        <Tooltip title="Thêm vào giỏ hàng" onClick={openCart}>
+                        <Tooltip title="Thêm vào giỏ hàng" onClick={onAddToCart}>
                             <Button style={{ backgroundColor: 'transparent' }} icon={<ShoppingCartOutlined style={{ color: '#fff' }} />} size={'large'} />
                         </Tooltip>
                         <Tooltip title="Xem sản phẩm" placement='bottom' onClick={openDetailCategory}>

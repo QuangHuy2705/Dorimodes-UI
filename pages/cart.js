@@ -1,21 +1,54 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import HeaderComponent from '../components/header'
-import { Row, Col, Timeline, Form, Input, Button } from 'antd'
+import { Row, Col, Timeline, Form, Input, Button, message, Popconfirm } from 'antd'
 import {
     ShoppingOutlined,
     LikeOutlined,
     PhoneOutlined,
     UserOutlined,
     PoundOutlined,
-    SoundOutlined
+    SoundOutlined,
+    DeleteOutlined
 } from '@ant-design/icons'
 import func from '../utils/func'
+import { useDispatch, useSelector } from 'react-redux'
 import { getLanguage } from '../utils/laguage'
+import { Actions as ActionCart } from '../redux/reducers/cart'
+import { useRouter } from "next/router";
+import _ from 'lodash'
 
 const { TextArea } = Input;
 
 function Cart() {
+    const { locale } = useRouter()
     const t = getLanguage()
+    const [countItems, setCountItems] = useState([])
+
+    const dispatch = useDispatch()
+    const {
+        carts
+    } = useSelector(item => item.cart)
+
+    useEffect(() => {
+        const cartsSult = func.getCartCurrent()
+        function loadData() {
+            if (!_.isEmpty(cartsSult)) {
+                dispatch(ActionCart.loadCart(cartsSult))
+            }
+        }
+        loadData()
+    }, [])
+
+    useEffect(() => {
+        if (!_.isEmpty(carts)) {
+            setCountItems(carts)
+        }
+    }, [carts])
+
+    const totalPrice = useCallback(() => {
+        const sum = countItems.reduce((partialSum, a) => partialSum + parseFloat(a.price) * a.quantity, 0)
+        return sum;
+    }, [countItems])
 
     return (
         <div className='flex-align-center' style={{ flexDirection: 'column', alignItems: 'center' }}>
@@ -32,26 +65,40 @@ function Cart() {
                         <table className='mt-10'>
                             <thead>
                                 <tr>
-                                    <td>{t.CART.table.product}</td>
-                                    <td>{t.CART.table.unitPrice}</td>
-                                    <td>{t.CART.table.quantity}</td>
-                                    <td>{t.CART.table.intoMoney}</td>
+                                    <td><b>{t.CART.table.product}</b></td>
+                                    <td><b>{t.CART.table.unitPrice}</b></td>
+                                    <td><b>{t.CART.table.quantity}</b></td>
+                                    <td><b>{t.CART.table.intoMoney}</b></td>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                <tr>
-                                    <td>Bikini</td>
-                                    <td>720</td>
-                                    <td>2</td>
-                                    <td>140</td>
-                                </tr>
+                                {
+                                    !_.isEmpty(countItems) &&
+                                    countItems.map((item, idx) => <tr key={idx}>
+                                        <td>{item?.name[locale]}</td>
+                                        <td>{item?.price}</td>
+                                        <td>{item.quantity}</td>
+                                        <td>{func.convertNumber(parseFloat(item.price | 0) * item.quantity)}</td>
+                                        <td style={{ textAlign: 'center' }}>
+                                            <Popconfirm
+                                                title="Are you sure to delete this product?"
+                                                onConfirm={() => { dispatch(ActionCart.removeFromCart(item.id)) }}
+                                                onCancel={() => { }}
+                                                okText="Yes"
+                                                cancelText="No"
+                                            >
+                                                <DeleteOutlined style={{ color: 'red', cursor: 'pointer', fontSize: 16 }} />
+                                            </Popconfirm>
+                                        </td>
+                                    </tr>)
+                                }
                             </tbody>
                         </table>
                         <div
                             style={{ textAlign: 'right' }}
                             className='mt-5 fs-20 fw-500'
-                        >{t.CART.totalPrice}: <span className='g-color-blue'>{func.convertNumber('1000')}$</span></div>
+                        >{t.CART.totalPrice}: <span className='g-color-blue'>{func.convertNumber(totalPrice())}$</span></div>
                     </Col>
                     <Col span={24} className="mt-20 fs-20 fw-500 g-color-red text-align-center">
                         <LikeOutlined /> &nbsp;{t.CART.content}!!!

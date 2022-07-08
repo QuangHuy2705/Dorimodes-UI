@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { CheckOutlined } from '@ant-design/icons'
 import { getLanguage } from '../../utils/laguage';
 
-const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = null, locale = 'pl' }) => {
+const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = null, locale = 'pl', onAddToCartDetail }) => {
     const t = getLanguage()
     const [quantity, setQuantity] = useState(1)
     const [size, setSize] = useState(null)
@@ -106,8 +106,17 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                             style={{ width: 60 }}
                             onChange={onChange}
                             className="custom-input"
-                        />&nbsp;&nbsp;&nbsp;&nbsp;<button className='btn-order-category'
-                            disabled={!color || !size}>{t.DETAIL.addToCart}</button>
+                        />&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button
+                            className='btn-order-category'
+                            disabled={!color || !size}
+                            onClick={() => onAddToCartDetail({
+                                ...data,
+                                quantity: quantity,
+                                size: size,
+                                color: color
+                            })}
+                        >{t.DETAIL.addToCart}</button>
                     </div>
                 </Col>
             </Row>
