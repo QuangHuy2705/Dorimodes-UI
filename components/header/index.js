@@ -41,6 +41,8 @@ function HeaderComponent() {
     useEffect(() => {
         if (!_.isEmpty(carts)) {
             setCountItems(carts)
+        } else {
+            setCountItems([])
         }
     }, [carts])
 

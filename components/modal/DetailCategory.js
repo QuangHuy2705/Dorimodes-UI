@@ -6,8 +6,8 @@ import { getLanguage } from '../../utils/laguage';
 const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = null, locale = 'pl', onAddToCartDetail }) => {
     const t = getLanguage()
     const [quantity, setQuantity] = useState(1)
-    const [size, setSize] = useState(null)
-    const [color, setColor] = useState(null)
+    const [size, setSize] = useState(data.size ? data.size[0] : null)
+    const [color, setColor] = useState(data.color ? data.color[0] : null)
 
     const onChange = (value) => {
         setQuantity(value)
@@ -50,13 +50,12 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                                 </Col>
                             )}
                         </Row>
-
                     }
                 </Col>
                 <Col span={12} >
                     <b className='fs-20'>{data.name[locale]}</b>
                     <div className='mt-5'>
-                        {t.DETAIL.status}: <Button type='primary' size='small' icon={<CheckOutlined />}>Còn hàng</Button>
+                        {t.DETAIL.status}: <Button type='primary' size='small' icon={<CheckOutlined />}>{t.DETAIL.statusType}</Button>
                     </div>
                     <div className='fs-22 g-color-blue mt-20'>
                         {data.price} PLZ
@@ -71,7 +70,7 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                         <>
                             {t.DETAIL.color}&nbsp;&nbsp;&nbsp;{data.color.map((c, idx) => {
                                 return <Button
-                                    className='btn-select-option'
+                                    className={`btn-select-option ${(color && color === c) ? 'isSelected' : ''}`}
                                     icon={(color && color === c) ? <CheckOutlined style={{ color: 'rgb(7, 164, 54)' }} /> : null}
                                     key={idx}
                                     onClick={() => handleChooseColor(c)}
@@ -87,7 +86,7 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                         <>
                             {t.DETAIL.size}&nbsp;&nbsp;&nbsp;{data.size.map((s, idx) => {
                                 return <Button
-                                    className='btn-select-option'
+                                    className={`btn-select-option ${(size && size === s) ? 'isSelected' : ''}`}
                                     key={idx}
                                     icon={(size && size === s) ? <CheckOutlined style={{ color: 'rgb(7, 164, 54)' }} /> : null}
                                     onClick={() => handleChooseSize(s)}

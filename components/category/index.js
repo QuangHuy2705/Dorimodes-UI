@@ -7,10 +7,10 @@ import { Actions } from '../../redux/reducers/cart'
 import { useDispatch } from 'react-redux'
 import DetailCategory from '../modal/DetailCategory'
 import { useRouter } from "next/router";
-import func from '../../utils/func'
+import { getLanguage } from '../../utils/laguage'
 
 function Category(props) {
-
+    const t = getLanguage()
     const { locale } = useRouter();
     const dispatch = useDispatch();
     const {
@@ -30,10 +30,10 @@ function Category(props) {
         const dataCart = {
             id: data.id,
             size: data.size[0] || null,
-            color: data.color[0] | null,
+            color: data.color[0] || null,
             quantity: 1,
             name: data.name,
-            price: data.price | 0
+            price: data.price || 0
         }
         dispatch(Actions.addToCart(dataCart))
     }
@@ -42,10 +42,10 @@ function Category(props) {
         const dataCart = {
             id: data.id,
             size: data.size || null,
-            color: data.color | null,
-            quantity: data.quantity | 1,
+            color: data.color || null,
+            quantity: data.quantity || 1,
             name: data.name,
-            price: data.price | 0
+            price: data.price || 0
         }
         dispatch(Actions.addToCart(dataCart))
         closeModalDetail()
@@ -72,10 +72,10 @@ function Category(props) {
 
                 <div className="category-action-hover">
                     <div className='action-hover'>
-                        <Tooltip title="Thêm vào giỏ hàng" onClick={onAddToCart}>
+                        <Tooltip title={t.DETAIL.addToCart} onClick={onAddToCart}>
                             <Button style={{ backgroundColor: 'transparent' }} icon={<ShoppingCartOutlined style={{ color: '#fff' }} />} size={'large'} />
                         </Tooltip>
-                        <Tooltip title="Xem sản phẩm" placement='bottom' onClick={openDetailCategory}>
+                        <Tooltip title={t.DETAIL.seeDetail} placement='bottom' onClick={openDetailCategory}>
                             <Button style={{ backgroundColor: 'transparent', top: 10 }} icon={<SearchOutlined style={{ color: '#fff' }} />} size={'large'} />
                         </Tooltip>
                     </div>

@@ -226,6 +226,10 @@ button:disabled {
     margin: 5px;
 }
 
+.isSelected {
+    border-color: $color-blue  !important;
+}
+
 .isActive {
     background-color: $color-green-select  !important;
     border-color: $color-green-select  !important;

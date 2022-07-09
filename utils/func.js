@@ -56,14 +56,16 @@ const addToCart = (data) => {
     }
 }
 
-const removeItemFromCart = (id) => {
+const removeItemFromCart = (index) => {
     try {
         let stored = getCartCurrent()
         if (!stored) {
             return;
         }
-        const arrTmp = stored.filter(item => item.id !== id)
-        localStorage.setItem(KEY_CART_STORAGE, JSON.stringify(arrTmp))
+        if (index > -1) {
+            stored.splice(index, 1)
+        }
+        localStorage.setItem(KEY_CART_STORAGE, JSON.stringify(stored))
     } catch (error) {
 
     }

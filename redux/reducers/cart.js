@@ -8,7 +8,7 @@ const { Types, Creators: Actions } = createActions(
     {
         loadCart: ['arrData'],
         addToCart: ['data'],
-        removeFromCart: ['id'],
+        removeFromCart: ['index'],
         removeAllCart: [],
     },
     { prefix: '@CART/' }
@@ -40,12 +40,14 @@ export default createReducer(INITIAL_STATE, {
 
     [Types.REMOVE_FROM_CART]: (
         state,
-        { id }
+        { index }
     ) =>
         produce(state, draft => {
             draft.isFetching = false
-            draft.carts = draft.carts.filter(item => item.id !== id)
-            func.removeItemFromCart(id)
+            if (index > -1) {
+                draft.carts.splice(index, 1)
+            }
+            func.removeItemFromCart(index)
         }),
 
     [Types.REMOVE_ALL_CART]: (state) =>

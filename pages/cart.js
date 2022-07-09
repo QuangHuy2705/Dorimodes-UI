@@ -14,20 +14,33 @@ import func from '../utils/func'
 import { useDispatch, useSelector } from 'react-redux'
 import { getLanguage } from '../utils/laguage'
 import { Actions as ActionCart } from '../redux/reducers/cart'
+import { Actions as ActionOrder } from '../redux/reducers/order'
 import { useRouter } from "next/router";
 import _ from 'lodash'
+import Link from 'next/link'
 
 const { TextArea } = Input;
 
 function Cart() {
     const { locale } = useRouter()
+    const router = useRouter()
     const t = getLanguage()
     const [countItems, setCountItems] = useState([])
+    const [infomation, setInfomation] = useState({
+        shippingAddress: '',
+        userName: '',
+        phone: null,
+        totalPrice: 0
+    })
 
     const dispatch = useDispatch()
     const {
-        carts
+        carts,
     } = useSelector(item => item.cart)
+    const {
+        isFetching,
+        orderId
+    } = useSelector(item => item.order)
 
     useEffect(() => {
         const cartsSult = func.getCartCurrent()
@@ -42,13 +55,42 @@ function Cart() {
     useEffect(() => {
         if (!_.isEmpty(carts)) {
             setCountItems(carts)
+        } else {
+            setCountItems([])
         }
     }, [carts])
+
+    useEffect(() => {
+        if (orderId) {
+            router.push(`order-result/${orderId}`)
+        }
+    }, [orderId])
 
     const totalPrice = useCallback(() => {
         const sum = countItems.reduce((partialSum, a) => partialSum + parseFloat(a.price) * a.quantity, 0)
         return sum;
     }, [countItems])
+
+    const onChange = (name, value) => {
+        setInfomation({
+            ...infomation,
+            [name]: value
+        })
+    }
+
+    const fetchApi = useCallback(_.debounce(() => {
+        const data = {
+            products: countItems,
+            ...infomation
+        }
+        dispatch(ActionOrder.postOrderRequest(data))
+    }, 300), [infomation, countItems])
+
+    const onSubmit = () => {
+        if (!_.isEmpty(countItems)) {
+            fetchApi()
+        }
+    }
 
     return (
         <div className='flex-align-center' style={{ flexDirection: 'column', alignItems: 'center' }}>
@@ -60,7 +102,8 @@ function Cart() {
                 <Col span={12}>
                     <Col span={24} className='table-cart mt-10'>
                         <div>
-                            <ShoppingOutlined style={{ color: 'rgb(5, 112, 218)', fontSize: 20 }} /> <span style={{ fontSize: 18 }}>{t.CART.yourCart} ({'5'} {t.CART.products})</span>
+                            <ShoppingOutlined style={{ color: 'rgb(5, 112, 218)', fontSize: 20 }} />
+                            &nbsp;<span style={{ fontSize: 18 }}>{t.CART.yourCart} ({countItems.length} {t.CART.products})</span>
                         </div>
                         <table className='mt-10'>
                             <thead>
@@ -74,24 +117,29 @@ function Cart() {
 
                             <tbody>
                                 {
-                                    !_.isEmpty(countItems) &&
-                                    countItems.map((item, idx) => <tr key={idx}>
-                                        <td>{item?.name[locale]}</td>
-                                        <td>{item?.price}</td>
-                                        <td>{item.quantity}</td>
-                                        <td>{func.convertNumber(parseFloat(item.price | 0) * item.quantity)}</td>
-                                        <td style={{ textAlign: 'center' }}>
-                                            <Popconfirm
-                                                title="Are you sure to delete this product?"
-                                                onConfirm={() => { dispatch(ActionCart.removeFromCart(item.id)) }}
-                                                onCancel={() => { }}
-                                                okText="Yes"
-                                                cancelText="No"
-                                            >
-                                                <DeleteOutlined style={{ color: 'red', cursor: 'pointer', fontSize: 16 }} />
-                                            </Popconfirm>
-                                        </td>
-                                    </tr>)
+                                    !_.isEmpty(countItems) ?
+                                        countItems.map((item, idx) => <tr key={idx}>
+                                            <td>{item?.name[locale]} (size: {item.size}, color: <span style={{ color: item.color }}>{item.color}</span>)</td>
+                                            <td>{item?.price}</td>
+                                            <td>{item.quantity}</td>
+                                            <td>{func.convertNumber(parseFloat(item.price | 0) * item.quantity)}</td>
+                                            <td style={{ textAlign: 'center' }}>
+                                                <Popconfirm
+                                                    title="Are you sure to delete this product?"
+                                                    onConfirm={() => { dispatch(ActionCart.removeFromCart(idx)) }}
+                                                    onCancel={() => { }}
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                >
+                                                    <DeleteOutlined style={{ color: 'red', cursor: 'pointer', fontSize: 16 }} />
+                                                </Popconfirm>
+                                            </td>
+                                        </tr>)
+                                        : <tr>
+                                            <td>
+                                                <Link href="/">{t.CART.empty}</Link>
+                                            </td>
+                                        </tr>
                                 }
                             </tbody>
                         </table>
@@ -109,6 +157,7 @@ function Cart() {
                                 name="basic"
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 16 }}
+                                onFinish={onSubmit}
                             >
                                 <Form.Item
                                     label={t.CART.form.fullname}
@@ -118,43 +167,51 @@ function Cart() {
                                     <Input
                                         className='custom-input'
                                         prefix={<UserOutlined />}
+                                        value={infomation.userName}
+                                        onChange={(e) => onChange('userName', e.target.value)}
                                     />
                                 </Form.Item>
                                 <Form.Item
                                     label={t.CART.form.phone}
-                                    name="username"
+                                    name="phone"
                                     rules={[{ required: true, message: 'Please input your phone number!' }]}
                                 >
                                     <Input
                                         className='custom-input'
                                         prefix={<PhoneOutlined />}
+                                        value={infomation.phone}
+                                        onChange={(e) => onChange('phone', e.target.value)}
                                     />
                                 </Form.Item>
                                 <Form.Item
                                     label={t.CART.form.address}
-                                    name="username"
+                                    name="shippingAddress"
                                     rules={[{ required: true, message: 'Please input your address!' }]}
                                 >
                                     <TextArea
                                         className='custom-input'
                                         rows={3}
-                                        placeholder="maxLength is 6"
-                                        maxLength={4}
+                                        placeholder="Your address"
+                                        value={infomation.shippingAddress}
+                                        onChange={(e) => onChange('shippingAddress', e.target.value)}
                                     />
                                 </Form.Item>
                                 <Form.Item
                                     label={t.CART.form.totalPurchase}
-                                    name="username"
+                                    name="totalPrice"
                                     rules={[{ required: true, message: 'Please input your cast!' }]}
                                 >
                                     <Input
                                         className='custom-input'
                                         type={'number'}
                                         prefix={<PoundOutlined />}
+                                        value={infomation.totalPrice}
+                                        onChange={(e) => onChange('totalPrice', e.target.value)}
                                     />
                                 </Form.Item>
                                 <Form.Item wrapperCol={{ offset: 8, span: 16 }} style={{ textAlign: 'right' }}>
-                                    <Button type="primary" htmlType="submit" className='btn-confirm'>
+                                    <Button type="primary" htmlType="submit" className='btn-confirm' loading={isFetching}
+                                    >
                                         {t.CART.submit}
                                     </Button>
                                 </Form.Item>
@@ -163,7 +220,7 @@ function Cart() {
                         <Col span={2} />
                         <Col span={11}>
                             <div className="modal-infomation">
-                                <div className='title' style={{ textAlign: 'left' }}>THÔNG TIN CHỦ CỬA HÀNG</div>
+                                <div className='title' style={{ textAlign: 'left' }}>{t.MODAL_INFO.title}</div>
                                 <Timeline>
                                     <Timeline.Item color="green">{t.MODAL_INFO.fullname}:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'Lê Viết Khang'}</span></Timeline.Item>
                                     <Timeline.Item color="green">
