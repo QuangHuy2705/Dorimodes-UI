@@ -44,7 +44,7 @@ export default {
             totalPurchase: 'Total purchase',
         },
         submit: 'Submit',
-        warning: 'Please pay then send information so we can serve you',
+        warning: 'Please send your information so we can serve you',
         empty: 'No products. Visit the homepage to continue shopping!!!'
     },
     DETAIL: {

@@ -44,7 +44,7 @@ export default {
             totalPurchase: 'Số tiền thanh toán',
         },
         submit: 'Gửi thông tin',
-        warning: 'Quý khách hàng vui lòng thanh toán sau đó gửi thông tin để chúng tôi có thể phục vụ quý khách',
+        warning: 'Quý khách hàng vui lòng gửi thông tin đặt hàng để chúng tôi có thể phục vụ quý khách',
         empty: 'Chưa có sản phẩm nào. Ghé trang chủ để tiếp tục mua sắm!!!'
     },
     DETAIL: {
