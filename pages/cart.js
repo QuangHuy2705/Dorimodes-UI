@@ -146,7 +146,7 @@ function Cart() {
                         <div
                             style={{ textAlign: 'right' }}
                             className='mt-5 fs-20 fw-500'
-                        >{t.CART.totalPrice}: <span className='g-color-blue'>{func.convertNumber(totalPrice())}$</span></div>
+                        >{t.CART.totalPrice}: <span className='g-color-blue'>{func.convertNumber(totalPrice())} PLZ</span></div>
                     </Col>
                     <Col span={24} className="mt-20 fs-20 fw-500 g-color-red text-align-center">
                         <LikeOutlined /> &nbsp;{t.CART.content}!!!
@@ -222,20 +222,21 @@ function Cart() {
                             <div className="modal-infomation">
                                 <div className='title' style={{ textAlign: 'left' }}>{t.MODAL_INFO.title}</div>
                                 <Timeline>
-                                    <Timeline.Item color="green">{t.MODAL_INFO.fullname}:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'Lê Viết Khang'}</span></Timeline.Item>
+                                    <Timeline.Item color="green">{t.MODAL_INFO.fullname}:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'Dung Nguyen'}</span></Timeline.Item>
+                                    <Timeline.Item color="green">{t.CART.form.phone}:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'+48 579172183'}</span></Timeline.Item>
                                     <Timeline.Item color="green">
                                         {t.MODAL_INFO.accountNumber}:&nbsp;&nbsp;
-                                        <span className="fw-500 g-color-blue-black">{'038005888678'}</span> <br />
-                                        <div style={{ marginLeft: 20 }}>
-                                            {t.MODAL_INFO.nameOfBank}:&nbsp;&nbsp;
-                                            <span className="fw-500 g-color-blue-black">{'VietComBank'}</span> <br />
-                                            {t.MODAL_INFO.accountName}:&nbsp;&nbsp;
-                                            <span className="fw-500 g-color-blue-black">{'Lê Viết Khang'}</span> <br />
-                                            {t.MODAL_INFO.branchName}:&nbsp;&nbsp;
-                                            <span className="fw-500 g-color-blue-black">{'Nam Kỳ Khởi Nghĩa - Quận 1 - TPHCM'}</span> <br />
-                                        </div>
+                                        <span className="fw-500 g-color-blue-black">{'89109016940000000141550078'}</span> <br />
+                                        {/* <div style={{ marginLeft: 20 }}>
+                            {t.MODAL_INFO.nameOfBank}:&nbsp;&nbsp;
+                            <span className="fw-500 g-color-blue-black">{'SANTANDER'}</span> <br />
+                            {t.MODAL_INFO.accountName}:&nbsp;&nbsp;
+                            <span className="fw-500 g-color-blue-black">{'Lê Viết Khang'}</span> <br />
+                            {t.MODAL_INFO.branchName}:&nbsp;&nbsp;
+                            <span className="fw-500 g-color-blue-black">{'Nam Kỳ Khởi Nghĩa - Quận 1 - TPHCM'}</span> <br />
+                        </div> */}
                                     </Timeline.Item>
-                                    <Timeline.Item color="green">{t.MODAL_INFO.address}:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'3 Lê Văn Huân - Tân Bình - TPHCM'}</span></Timeline.Item>
+                                    {/* <Timeline.Item color="green">{t.MODAL_INFO.address}:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'3 Lê Văn Huân - Tân Bình - TPHCM'}</span></Timeline.Item> */}
                                 </Timeline>
                                 <SoundOutlined />&nbsp;<i>{t.CART.warning}!!! </i>
                             </div>
