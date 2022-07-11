@@ -23,7 +23,7 @@ function HomeComponent() {
             <Spin spinning={isFetching}>
                 <Row className='flex-align-center'>
                     <div className='container'>
-                        <Row gutter={[30, 45]}>
+                        <Row gutter={[25, 30]} style={{ margin: 0 }}>
                             {
                                 (products || []).map((item, idx) => {
                                     return <Col sm={6} xs={24} key={item.id}>

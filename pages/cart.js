@@ -29,8 +29,7 @@ function Cart() {
     const [infomation, setInfomation] = useState({
         shippingAddress: '',
         userName: '',
-        phone: null,
-        totalPrice: 0
+        phone: null
     })
 
     const dispatch = useDispatch()
@@ -98,8 +97,8 @@ function Cart() {
                 <HeaderComponent />
             </div>
             <Row style={{ width: '100%' }}>
-                <Col span={6} />
-                <Col span={12}>
+                <Col sm={6} xs={0} />
+                <Col sm={12} xs={24}>
                     <Col span={24} className='table-cart mt-10'>
                         <div>
                             <ShoppingOutlined style={{ color: 'rgb(5, 112, 218)', fontSize: 20 }} />
@@ -152,8 +151,8 @@ function Cart() {
                         <LikeOutlined /> &nbsp;{t.CART.content}!!!
                     </Col>
                     <Row className="mt-20">
-                        <Col span={6} />
-                        <Col span={12}>
+                        <Col sm={6} xs={0} />
+                        <Col sm={12} xs={24}>
                             <Form
                                 name="basic"
                                 labelCol={{ span: 8 }}
@@ -197,20 +196,7 @@ function Cart() {
                                         onChange={(e) => onChange('shippingAddress', e.target.value)}
                                     />
                                 </Form.Item>
-                                <Form.Item
-                                    label={t.CART.form.totalPurchase}
-                                    name="totalPrice"
-                                    rules={[{ required: true, message: 'Please input your cast!' }]}
-                                >
-                                    <Input
-                                        className='custom-input'
-                                        type={'number'}
-                                        prefix={<PoundOutlined />}
-                                        value={infomation.totalPrice}
-                                        onChange={(e) => onChange('totalPrice', e.target.value)}
-                                    />
-                                </Form.Item>
-                                <Form.Item wrapperCol={{ offset: 8, span: 16 }} style={{ textAlign: 'right' }}>
+                                <Form.Item wrapperCol={{ sm: { offset: 8, span: 16 } }} style={{ textAlign: 'right' }}>
                                     <Button type="primary" htmlType="submit" className='btn-confirm' loading={isFetching}
                                     >
                                         {t.CART.submit}

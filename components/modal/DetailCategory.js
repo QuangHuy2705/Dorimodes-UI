@@ -40,7 +40,7 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
             className="modal-style-info"
         >
             <Row>
-                <Col span={12} style={{ paddingRight: 20 }}>
+                <Col span={12} xs={24} style={{ paddingRight: 20 }}>
                     <img alt="" src={data.image[0]} width='100%' />
                     {
                         <Row className='mt-20'>
@@ -52,7 +52,7 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                         </Row>
                     }
                 </Col>
-                <Col span={12} >
+                <Col span={12} xs={24}>
                     <b className='fs-20'>{data.name[locale]}</b>
                     <div className='mt-5'>
                         {t.DETAIL.status}: <Button type='primary' size='small' icon={<CheckOutlined />}>{t.DETAIL.statusType}</Button>

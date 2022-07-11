@@ -13,6 +13,7 @@ import { Actions as ActionCart } from '../../redux/reducers/cart'
 import { useRouter } from "next/router";
 import { getLanguage } from '../../utils/laguage'
 import func from '../../utils/func'
+import { MenuUnfoldOutlined } from '@ant-design/icons'
 import _ from 'lodash'
 
 function HeaderComponent() {
@@ -87,12 +88,12 @@ function HeaderComponent() {
                 render={renderInfo()}
             />
             <Col sm={2} xs={0} />
-            <Col sm={3} xs={24}>
+            <Col sm={3} xs={12}>
                 <Link href="/">
                     <Image style={{ cursor: 'pointer' }} alt="" src='/images/logo.png' width={100} height={30} quality={100} />
                 </Link>
             </Col>
-            <Col sm={12} xs={24}>
+            <Col sm={12} xs={0}>
                 <nav>
                     <ul>
                         <li style={{ display: 'inline-block' }}>
@@ -113,7 +114,7 @@ function HeaderComponent() {
                     </ul>
                 </nav>
             </Col>
-            <Col sm={2} xs={16}>
+            <Col sm={2} xs={12} style={{ textAlign: 'right' }}>
                 <UserOutlined className="cart-header" onClick={openInfomation} />
                 <Link href="/cart">
                     <Badge count={!_.isEmpty(countItems) ? countItems.length : null} overflowCount={9}>
@@ -121,7 +122,7 @@ function HeaderComponent() {
                     </Badge>
                 </Link>
             </Col>
-            <Col sm={4} xs={8}>
+            <Col sm={4} xs={24}>
                 <div className="navbar">
                     {locales.map((l, i) => {
                         return (

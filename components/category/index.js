@@ -61,12 +61,12 @@ function Category(props) {
                     onAddToCartDetail={onAddToCartDetail}
                     locale={locale}
                 />
-                <div>
+                <div className='flex-align-center'>
                     <img
                         src={data.image[0]}
                         alt="Picture of the author"
                         width={'100%'}
-                        style={{ height: 335 }}
+                        style={{ height: 400, maxWidth: 300 }}
                     />
                 </div>
 
