@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Breadcrumb, Row, Col, Select, Checkbox, Collapse, Empty, Spin } from 'antd';
+import { Breadcrumb, Row, Col, Select, Checkbox, Collapse, Empty, Spin, List } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux'
 import { Actions } from '../../redux/reducers/product'
@@ -45,6 +45,7 @@ function Products() {
     const { locale } = useRouter();
     const [productsSort, setProductSort] = useState([])
     const [arrCatrgories, setArrCatrgories] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
     const [filters, setFilters] = useState({
         color: [],
         size: [],
@@ -105,6 +106,7 @@ function Products() {
             }
         }
         setOptionSort(value)
+        setCurrentPage(1)
     }
 
     const filterWithCategory = (idCat) => {
@@ -156,8 +158,13 @@ function Products() {
         dispatch(Actions.getProductFiltersRequest(params))
     }
 
+    const onChangePage = (page) => {
+        setCurrentPage(page)
+    }
+
     return (
         <div className='wrapper-product-container'>
+            <div className='background-product mt-0' />
             <div className='banner-content'>
                 <div className='content-text'>
                     {t.PRODUCTS.allProductsTitle}
@@ -247,18 +254,21 @@ function Products() {
                             </Select>
                         </div>
                         <div className='border-bottom-width' />
-                        <Spin spinning={isFetching}>
-                            <Row gutter={[30, 45]}>
-                                {
-                                    (productsSort || []).map((item, idx) => {
-                                        return <Col sm={8} xs={24} key={item.id}>
-                                            <Category data={item} />
-                                        </Col>
-                                    })
-                                }
-                            </Row>
-                            <div className='text-align-center '> {(!products || products.length === 0) && < Empty />}</div>
-                        </Spin>
+                        <List
+                            grid={{ gutter: [25, 30], column: 3 }}
+                            dataSource={productsSort}
+                            loading={isFetching}
+                            pagination={{
+                                defaultPageSize: 15,
+                                current: currentPage,
+                                onChange: onChangePage
+                            }}
+                            renderItem={item => (
+                                <List.Item>
+                                    <Category data={item} />
+                                </List.Item>
+                            )}
+                        />
                     </Col>
                 </Row>
             </div>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Category from '../category'
-import { Row, Col, Divider, Empty, Spin } from 'antd'
+import { Row, List, Divider, Empty } from 'antd'
 import { useSelector, useDispatch } from 'react-redux'
 import { getLanguage } from '../../utils/laguage'
 
@@ -20,23 +20,24 @@ function HomeComponent() {
                 HOT DEAL
             </div>
             <Divider plain>{t.HOME.outstanding}</Divider>
-            <Spin spinning={isFetching}>
-                <Row className='flex-align-center'>
-                    <div className='container'>
-                        <Row gutter={[25, 30]} style={{ margin: 0 }}>
-                            {
-                                (products || []).map((item, idx) => {
-                                    return <Col sm={6} xs={24} key={item.id}>
-                                        <Category data={item} />
-                                    </Col>
-                                })
-                            }
-                        </Row>
-                        <div className='text-align-center '> {(!products || products.length === 0) && < Empty />}</div>
-                    </div>
-                </Row>
-            </Spin>
-
+            <Row className='flex-align-center'>
+                <div className='container'>
+                    <List
+                        grid={{ gutter: [25, 30], column: 3 }}
+                        dataSource={products}
+                        loading={isFetching}
+                        pagination={{
+                            defaultPageSize: 15
+                        }}
+                        renderItem={item => (
+                            <List.Item>
+                                <Category data={item} />
+                            </List.Item>
+                        )}
+                    />
+                    <div className='text-align-center '> {(!products || products.length === 0) && < Empty />}</div>
+                </div>
+            </Row>
         </div>
     )
 }
