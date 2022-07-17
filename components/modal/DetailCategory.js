@@ -65,7 +65,7 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                         {data.description[locale]}
                     </div>
                     <div className='border-bottom-width' />
-                    {
+                    {/* {
                         data.color && data.color.length > 0 &&
                         <>
                             {t.DETAIL.color}&nbsp;&nbsp;&nbsp;{data.color.map((c, idx) => {
@@ -80,7 +80,7 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                             })}
                             <div className='border-bottom-width' />
                         </>
-                    }
+                    } */}
                     {
                         data.size && data.size.length > 0 &&
                         <>
@@ -108,12 +108,11 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                         />&nbsp;&nbsp;&nbsp;&nbsp;
                         <button
                             className='btn-order-category'
-                            disabled={!color || !size}
+                            disabled={!size}
                             onClick={() => onAddToCartDetail({
                                 ...data,
                                 quantity: quantity,
-                                size: size,
-                                color: color
+                                size: size
                             })}
                         >{t.DETAIL.addToCart}</button>
                     </div>

@@ -18,6 +18,8 @@ import { Actions as ActionOrder } from '../redux/reducers/order'
 import { useRouter } from "next/router";
 import _ from 'lodash'
 import Link from 'next/link'
+import Footer from '../components/Footer'
+import styles from '../styles/Home.module.css'
 
 const { TextArea } = Input;
 
@@ -92,124 +94,126 @@ function Cart() {
     }
 
     return (
-        <div className='flex-align-center' style={{ flexDirection: 'column', alignItems: 'center' }}>
-            <div className='main-header'>
-                <HeaderComponent />
-            </div>
-            <Row style={{ width: '100%' }}>
-                <Col sm={6} xs={0} />
-                <Col sm={12} xs={24}>
-                    <Col span={24} className='table-cart mt-10'>
-                        <div>
-                            <ShoppingOutlined style={{ color: 'rgb(5, 112, 218)', fontSize: 20 }} />
-                            &nbsp;<span style={{ fontSize: 18 }}>{t.CART.yourCart} ({countItems.length} {t.CART.products})</span>
-                        </div>
-                        <table className='mt-10'>
-                            <thead>
-                                <tr>
-                                    <td><b>{t.CART.table.product}</b></td>
-                                    <td><b>{t.CART.table.unitPrice}</b></td>
-                                    <td><b>{t.CART.table.quantity}</b></td>
-                                    <td><b>{t.CART.table.intoMoney}</b></td>
-                                </tr>
-                            </thead>
+        <div className={styles.container}>
+            <div className='flex-align-center' style={{ flexDirection: 'column', alignItems: 'center' }}>
+                <div className='main-header'>
+                    <HeaderComponent />
+                </div>
+                <Row style={{ width: '100%' }}>
+                    <Col sm={6} xs={0} />
+                    <Col sm={12} xs={24}>
+                        <Col span={24} className='table-cart mt-10'>
+                            <div>
+                                <ShoppingOutlined style={{ color: 'rgb(5, 112, 218)', fontSize: 20 }} />
+                                &nbsp;<span style={{ fontSize: 18 }}>{t.CART.yourCart} ({countItems.length} {t.CART.products})</span>
+                            </div>
+                            <table className='mt-10'>
+                                <thead>
+                                    <tr>
+                                        <td><b>{t.CART.table.product}</b></td>
+                                        <td><b>{t.CART.table.unitPrice}</b></td>
+                                        <td><b>{t.CART.table.quantity}</b></td>
+                                        <td><b>{t.CART.table.intoMoney}</b></td>
+                                    </tr>
+                                </thead>
 
-                            <tbody>
-                                {
-                                    !_.isEmpty(countItems) ?
-                                        countItems.map((item, idx) => <tr key={idx}>
-                                            <td>{item?.name[locale]} (size: {item.size}, color: <span style={{ color: item.color }}>{item.color}</span>)</td>
-                                            <td>{item?.price}</td>
-                                            <td>{item.quantity}</td>
-                                            <td>{func.convertNumber(parseFloat(item.price | 0) * item.quantity)}</td>
-                                            <td style={{ textAlign: 'center' }}>
-                                                <Popconfirm
-                                                    title="Are you sure to delete this product?"
-                                                    onConfirm={() => { dispatch(ActionCart.removeFromCart(idx)) }}
-                                                    onCancel={() => { }}
-                                                    okText="Yes"
-                                                    cancelText="No"
-                                                >
-                                                    <DeleteOutlined style={{ color: 'red', cursor: 'pointer', fontSize: 16 }} />
-                                                </Popconfirm>
-                                            </td>
-                                        </tr>)
-                                        : <tr>
-                                            <td>
-                                                <Link href="/">{t.CART.empty}</Link>
-                                            </td>
-                                        </tr>
-                                }
-                            </tbody>
-                        </table>
-                        <div
-                            style={{ textAlign: 'right' }}
-                            className='mt-5 fs-20 fw-500'
-                        >{t.CART.totalPrice}: <span className='g-color-blue'>{func.convertNumber(totalPrice())} PLZ</span></div>
-                    </Col>
-                    <Col span={24} className="mt-20 fs-20 fw-500 g-color-red text-align-center">
-                        <LikeOutlined /> &nbsp;{t.CART.content}!!!
-                    </Col>
-                    <Row className="mt-20">
-                        <Col sm={6} xs={0} />
-                        <Col sm={12} xs={24}>
-                            <Form
-                                name="basic"
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 16 }}
-                                onFinish={onSubmit}
-                            >
-                                <Form.Item
-                                    label={t.CART.form.fullname}
-                                    name="username"
-                                    rules={[{ required: true, message: 'Please input your username!' }]}
-                                >
-                                    <Input
-                                        className='custom-input'
-                                        prefix={<UserOutlined />}
-                                        value={infomation.userName}
-                                        onChange={(e) => onChange('userName', e.target.value)}
-                                    />
-                                </Form.Item>
-                                <Form.Item
-                                    label={t.CART.form.phone}
-                                    name="phone"
-                                    rules={[{ required: true, message: 'Please input your phone number!' }]}
-                                >
-                                    <Input
-                                        className='custom-input'
-                                        prefix={<PhoneOutlined />}
-                                        value={infomation.phone}
-                                        onChange={(e) => onChange('phone', e.target.value)}
-                                    />
-                                </Form.Item>
-                                <Form.Item
-                                    label={t.CART.form.address}
-                                    name="shippingAddress"
-                                    rules={[{ required: true, message: 'Please input your address!' }]}
-                                >
-                                    <TextArea
-                                        className='custom-input'
-                                        rows={3}
-                                        placeholder="Your address"
-                                        value={infomation.shippingAddress}
-                                        onChange={(e) => onChange('shippingAddress', e.target.value)}
-                                    />
-                                </Form.Item>
-                                <Form.Item wrapperCol={{ sm: { offset: 8, span: 16 } }} style={{ textAlign: 'right' }}>
-                                    <Button type="primary" htmlType="submit" className='btn-confirm' loading={isFetching}
-                                    >
-                                        {t.CART.submit}
-                                    </Button>
-                                </Form.Item>
-                            </Form>
+                                <tbody>
+                                    {
+                                        !_.isEmpty(countItems) ?
+                                            countItems.map((item, idx) => <tr key={idx}>
+                                                <td>{item?.name[locale]} (size: {item.size})</td>
+                                                <td>{item?.price}</td>
+                                                <td>{item.quantity}</td>
+                                                <td>{func.convertNumber(parseFloat(item.price | 0) * item.quantity)}</td>
+                                                <td style={{ textAlign: 'center' }}>
+                                                    <Popconfirm
+                                                        title="Are you sure to delete this product?"
+                                                        onConfirm={() => { dispatch(ActionCart.removeFromCart(idx)) }}
+                                                        onCancel={() => { }}
+                                                        okText="Yes"
+                                                        cancelText="No"
+                                                    >
+                                                        <DeleteOutlined style={{ color: 'red', cursor: 'pointer', fontSize: 16 }} />
+                                                    </Popconfirm>
+                                                </td>
+                                            </tr>)
+                                            : <tr>
+                                                <td>
+                                                    <Link href="/">{t.CART.empty}</Link>
+                                                </td>
+                                            </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div
+                                style={{ textAlign: 'right' }}
+                                className='mt-5 fs-20 fw-500'
+                            >{t.CART.totalPrice}: <span className='g-color-blue'>{func.convertNumber(totalPrice())} PLZ</span></div>
                         </Col>
-                    </Row>
+                        <Col span={24} className="mt-20 fs-20 fw-500 g-color-red text-align-center">
+                            <LikeOutlined /> &nbsp;{t.CART.content}!!!
+                        </Col>
+                        <Row className="mt-20">
+                            <Col sm={6} xs={0} />
+                            <Col sm={12} xs={24}>
+                                <Form
+                                    name="basic"
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 16 }}
+                                    onFinish={onSubmit}
+                                >
+                                    <Form.Item
+                                        label={t.CART.form.fullname}
+                                        name="username"
+                                        rules={[{ required: true, message: 'Please input your username!' }]}
+                                    >
+                                        <Input
+                                            className='custom-input'
+                                            prefix={<UserOutlined />}
+                                            value={infomation.userName}
+                                            onChange={(e) => onChange('userName', e.target.value)}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label={t.CART.form.phone}
+                                        name="phone"
+                                        rules={[{ required: true, message: 'Please input your phone number!' }]}
+                                    >
+                                        <Input
+                                            className='custom-input'
+                                            prefix={<PhoneOutlined />}
+                                            value={infomation.phone}
+                                            onChange={(e) => onChange('phone', e.target.value)}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label={t.CART.form.address}
+                                        name="shippingAddress"
+                                        rules={[{ required: true, message: 'Please input your address!' }]}
+                                    >
+                                        <TextArea
+                                            className='custom-input'
+                                            rows={3}
+                                            placeholder="Your address"
+                                            value={infomation.shippingAddress}
+                                            onChange={(e) => onChange('shippingAddress', e.target.value)}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item wrapperCol={{ sm: { offset: 8, span: 16 } }} style={{ textAlign: 'right' }}>
+                                        <Button type="primary" htmlType="submit" className='btn-confirm' loading={isFetching}
+                                        >
+                                            {t.CART.submit}
+                                        </Button>
+                                    </Form.Item>
+                                </Form>
+                            </Col>
+                        </Row>
 
-                </Col>
-            </Row >
-        </div >
-
+                    </Col>
+                </Row >
+            </div >
+            <Footer />
+        </div>
     )
 }
 

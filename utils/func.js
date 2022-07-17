@@ -44,7 +44,6 @@ const addToCart = (data) => {
         const nomarlize = {
             id: data.id,
             size: data.size || null,
-            color: data.color || null,
             quantity: data.quantity || null,
             name: data.name,
             price: data.price | 0

@@ -32,6 +32,7 @@ function HeaderComponent() {
         function loadData() {
             dispatch(Actions.getProductRequest())
             dispatch(ActionCategory.getCategoryRequest())
+            dispatch(ActionCategory.getSizeRequest())
             if (!_.isEmpty(cartsSult)) {
                 dispatch(ActionCart.loadCart(cartsSult))
             }
@@ -88,12 +89,12 @@ function HeaderComponent() {
                 render={renderInfo()}
             />
             <Col sm={2} xs={0} />
-            <Col sm={3} xs={12}>
+            <Col md={3} sm={24} xs={12}>
                 <Link href="/">
                     <Image style={{ cursor: 'pointer' }} alt="" src='/images/logo.png' width={100} height={30} quality={100} />
                 </Link>
             </Col>
-            <Col sm={12} xs={0}>
+            <Col md={12} sm={14} xs={0}>
                 <nav>
                     <ul>
                         <li style={{ display: 'inline-block' }}>
@@ -114,7 +115,7 @@ function HeaderComponent() {
                     </ul>
                 </nav>
             </Col>
-            <Col sm={2} xs={12} style={{ textAlign: 'right' }}>
+            <Col lg={2} md={4} sm={8} xs={12} style={{ textAlign: 'right' }}>
                 <UserOutlined className="cart-header" onClick={openInfomation} />
                 <Link href="/cart">
                     <Badge count={!_.isEmpty(countItems) ? countItems.length : null} overflowCount={9}>
@@ -122,7 +123,7 @@ function HeaderComponent() {
                     </Badge>
                 </Link>
             </Col>
-            <Col sm={4} xs={24}>
+            <Col lg={5} md={4} xs={24}>
                 <div className="navbar">
                     {locales.map((l, i) => {
                         return (

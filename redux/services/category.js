@@ -9,6 +9,16 @@ const getCategory = async () => {
     }
 }
 
+const getSizes = async () => {
+    try {
+        const { data } = await api.get(`/size`)
+        return data
+    } catch (error) {
+
+    }
+}
+
 export default {
-    getCategory
+    getCategory,
+    getSizes
 }

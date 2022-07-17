@@ -12,6 +12,16 @@ function* getCategory() {
     }
 }
 
+function* getSize() {
+    try {
+        const data = yield call(categoryService.getSizes)
+        yield put(Actions.getSizeSuccess(data))
+    } catch (error) {
+        func.notificationAlert('error', 'Thông báo', 'Thao tác thất bại: ' + error.message)
+    }
+}
+
 export default function* watchProduct() {
     yield takeLatest(Types.GET_CATEGORY_REQUEST, getCategory)
+    yield takeLatest(Types.GET_SIZE_REQUEST, getSize)
 }

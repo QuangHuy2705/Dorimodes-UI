@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Breadcrumb, Row, Col, Select, Checkbox, Collapse, Empty, Spin, List } from 'antd';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Breadcrumb, Row, Col, Select, Checkbox, Collapse, Input, List } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux'
 import { Actions } from '../../redux/reducers/product'
@@ -47,14 +47,15 @@ function Products() {
     const [arrCatrgories, setArrCatrgories] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [filters, setFilters] = useState({
-        color: [],
+        // color: [],
         size: [],
         category: []
     })
     const [optionSort, setOptionSort] = useState(0)
+    const [valueSortByName, setSortByName] = useState(null)
     const { products, isFetching } = useSelector(state => state.product)
     const dispatch = useDispatch()
-    const { categories } = useSelector(state => state.category)
+    const { categories, sizes } = useSelector(state => state.category)
 
     useEffect(() => {
         setProductSort(products)
@@ -93,20 +94,32 @@ function Products() {
         loadHandleCategories()
     }, [categories])
 
-    const handleSortChange = (value) => {
+    useEffect(() => {
+        handleSortChange(optionSort, valueSortByName)
+    }, [optionSort, valueSortByName])
+
+    const handleSortChange = (value, valueSortByName = null) => {
+        const arrTmp = []
         if (products && products.length > 0) {
             if (value === 1) {
-                setProductSort(_.orderBy(products, (o) => parseFloat(o.price), ['asc']))
+                arrTmp = _.orderBy(products, (o) => parseFloat(o.price), ['asc'])
             }
             if (value === 2) {
-                setProductSort(_.orderBy(products, (o) => parseFloat(o.price), ['desc']))
+                arrTmp = _.orderBy(products, (o) => parseFloat(o.price), ['desc'])
             }
             if (value === 0) {
-                setProductSort(products)
+                arrTmp = products
             }
         }
-        setOptionSort(value)
+        if (valueSortByName) {
+            arrTmp = arrTmp.filter(item => (item.name[locale]).toLowerCase().includes(valueSortByName.toLowerCase()))
+        }
+        setProductSort(arrTmp)
         setCurrentPage(1)
+    }
+
+    const handleSortByPrice = (value) => {
+        setOptionSort(value)
     }
 
     const filterWithCategory = (idCat) => {
@@ -144,6 +157,7 @@ function Products() {
     }
 
     const onFilterSize = (listSize) => {
+        console.log(listSize, " listSize")
         setFilters({
             ...filters,
             size: listSize
@@ -160,6 +174,15 @@ function Products() {
 
     const onChangePage = (page) => {
         setCurrentPage(page)
+    }
+
+    const sortByName = useCallback(_.debounce((value) => {
+        setSortByName(value)
+    }, 300), [])
+
+    const handleChange = (event) => {
+        const { value } = event.target;
+        sortByName(value)
     }
 
     return (
@@ -215,25 +238,20 @@ function Products() {
                         <div className='mt-20'>
                             <Checkbox.Group style={{ width: '100%' }} value={filters.size} onChange={onFilterSize}>
                                 <Row gutter={[0, 10]}>
-                                    <Col span={12}>
-                                        <Checkbox value="s">S</Checkbox>
-                                    </Col>
-                                    <Col span={12}>
-                                        <Checkbox value="l">L</Checkbox>
-                                    </Col>
-                                    <Col span={12}>
-                                        <Checkbox value="m">M</Checkbox>
-                                    </Col>
-                                    <Col span={12}>
-                                        <Checkbox value="xl">XL</Checkbox>
-                                    </Col>
+                                    {
+                                        (sizes || []).map(item => {
+                                            return <Col span={12} key={item.id}>
+                                                <Checkbox value={item.name}>{item.name}</Checkbox>
+                                            </Col>
+                                        })
+                                    }
                                 </Row>
                             </Checkbox.Group>
                         </div>
-                        <div className='fs-18 fw-600 mt-30'>
+                        {/* <div className='fs-18 fw-600 mt-30'>
                             {t.PRODUCTS.color}
-                        </div>
-                        <div className='mt-20 group-color'>
+                        </div> */}
+                        {/* <div className='mt-20 group-color'>
                             {COLOR_CONFIGS.map(item => {
                                 return <div
                                     onClick={() => onFilterProduct(item._id)}
@@ -242,17 +260,24 @@ function Products() {
 
                                 />
                             })}
-                        </div>
+                        </div> */}
                     </Col>
                     <Col span={18}>
-                        <div className='flex-center-right'>
-                            {t.PRODUCTS.sortBy}
-                            <Select className='custom-select-sort' style={{ width: 180 }} value={optionSort} onChange={handleSortChange}>
-                                <Option value={0}>{t.PRODUCTS.default}</Option>
-                                <Option value={1}>{t.PRODUCTS.lowToHigh}</Option>
-                                <Option value={2}>{t.PRODUCTS.hightToLow}</Option>
-                            </Select>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <div>
+                                {t.PRODUCTS.searchByName}
+                                <Input onChange={handleChange} />
+                            </div>
+                            <div style={{ display: 'grid' }}>
+                                {t.PRODUCTS.sortBy}
+                                <Select className='custom-select-sort' style={{ width: 180 }} value={optionSort} onChange={(value) => handleSortByPrice(value)}>
+                                    <Option value={0}>{t.PRODUCTS.default}</Option>
+                                    <Option value={1}>{t.PRODUCTS.lowToHigh}</Option>
+                                    <Option value={2}>{t.PRODUCTS.hightToLow}</Option>
+                                </Select>
+                            </div>
                         </div>
+
                         <div className='border-bottom-width' />
                         <List
                             grid={{ gutter: [25, 30], column: 3 }}

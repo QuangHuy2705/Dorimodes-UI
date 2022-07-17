@@ -19,6 +19,7 @@ export default {
         home: 'Trang chủ',
         allProducts: 'Tất cả sản phẩm',
         sortBy: 'Sắp xếp theo giá',
+        searchByName: 'Tìm kiếm theo tên',
         default: 'Mặc định',
         category: 'Danh mục',
         lowToHigh: 'Từ thấp tới cao',

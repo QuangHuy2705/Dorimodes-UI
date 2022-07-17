@@ -2,20 +2,26 @@ import React, { useEffect } from 'react'
 import HeaderComponent from '../components/header'
 import { Row, Col, Timeline, Form, Input, Button } from 'antd'
 import Products from '../components/products'
-import func from '../utils/func'
+import Footer from '../components/Footer'
+import styles from '../styles/Home.module.css'
 
 const { TextArea } = Input;
 
 function Product() {
     return (
-        <div className='flex-align-center' style={{ flexDirection: 'column', alignItems: 'center' }}>
-            <div className='main-header'>
-                <HeaderComponent />
-            </div>
-            <Row style={{ width: '100%' }}>
-                <Products />
-            </Row >
-        </div >
+        <div className={styles.container}>
+            <div className='flex-align-center' style={{ flexDirection: 'column', alignItems: 'center' }}>
+                <div className='main-header'>
+                    <HeaderComponent />
+                </div>
+                <Row style={{ width: '100%' }}>
+                    <Products />
+                </Row >
+            </div >
+
+            <Footer />
+        </div>
+
 
     )
 }
