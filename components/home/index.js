@@ -23,7 +23,7 @@ function HomeComponent() {
             <Row className='flex-align-center'>
                 <div className='container'>
                     <List
-                        grid={{ gutter: [25, 30], column: 3 }}
+                        grid={{ gutter: [25, 30], column: 4 }}
                         dataSource={products}
                         loading={isFetching}
                         pagination={{
