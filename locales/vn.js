@@ -46,7 +46,12 @@ export default {
         },
         submit: 'Gửi thông tin',
         warning: 'Quý khách hàng vui lòng gửi thông tin đặt hàng để chúng tôi có thể phục vụ quý khách',
-        empty: 'Chưa có sản phẩm nào. Ghé trang chủ để tiếp tục mua sắm!!!'
+        empty: 'Chưa có sản phẩm nào. Ghé trang chủ để tiếp tục mua sắm!!!',
+        paymentMethod: 'Phương thức thanh toán',
+        national: 'Quốc Gia',
+        prepay: 'Trả trước',
+        postpaid: 'Trả sau',
+        shippingCompany: 'Hãng vận chuyển'
     },
     DETAIL: {
         status: 'Trạng thái',

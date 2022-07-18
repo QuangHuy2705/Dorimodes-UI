@@ -15,6 +15,17 @@ function* postOrder({ data }) {
     }
 }
 
+function* shipingCompany() {
+    try {
+        const data = yield call(orderService.shipingCompany)
+        yield put(Actions.shipingCompanySuccess(data))
+    } catch (error) {
+        func.notificationAlert('error', 'Thông báo', 'Thao tác thất bại: ' + error.message)
+        yield put(Actions.shipingCompanyFailure(error))
+    }
+}
+
 export default function* watchProduct() {
     yield takeLatest(Types.POST_ORDER_REQUEST, postOrder)
+    yield takeLatest(Types.SHIPING_COMPANY_REQUEST, shipingCompany)
 }

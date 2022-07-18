@@ -11,6 +11,16 @@ const order = async (body) => {
     }
 }
 
+const shipingCompany = async () => {
+    try {
+        const { data } = await api.get(`/shipping`)
+        return data
+    } catch (error) {
+
+    }
+}
+
 export default {
-    order
+    order,
+    shipingCompany
 }

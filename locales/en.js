@@ -46,7 +46,12 @@ export default {
         },
         submit: 'Submit',
         warning: 'Please send your information so we can serve you',
-        empty: 'No products. Visit the homepage to continue shopping!!!'
+        empty: 'No products. Visit the homepage to continue shopping!!!',
+        paymentMethod: 'Payment Method',
+        national: 'Country',
+        prepay: 'Prepay',
+        postpaid: 'Postpaid',
+        shippingCompany: 'Shipping Company'
     },
     DETAIL: {
         status: 'Status',

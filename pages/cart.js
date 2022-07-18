@@ -1,16 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import HeaderComponent from '../components/header'
-import { Row, Col, Timeline, Form, Input, Button, message, Popconfirm } from 'antd'
+import { Row, Col, Form, Input, Button, Radio, Popconfirm, Space, Select } from 'antd'
 import {
     ShoppingOutlined,
     LikeOutlined,
     PhoneOutlined,
     UserOutlined,
-    PoundOutlined,
-    SoundOutlined,
     DeleteOutlined
 } from '@ant-design/icons'
 import func from '../utils/func'
+import { countries } from '../utils/countries'
 import { useDispatch, useSelector } from 'react-redux'
 import { getLanguage } from '../utils/laguage'
 import { Actions as ActionCart } from '../redux/reducers/cart'
@@ -22,16 +21,20 @@ import Footer from '../components/Footer'
 import styles from '../styles/Home.module.css'
 
 const { TextArea } = Input;
+const { Option } = Select;
 
 function Cart() {
     const { locale } = useRouter()
     const router = useRouter()
     const t = getLanguage()
     const [countItems, setCountItems] = useState([])
+    const [optionPay, setOptionPay] = useState(0)
+    const [national, setNational] = useState('')
     const [infomation, setInfomation] = useState({
         shippingAddress: '',
         userName: '',
-        phone: null
+        phone: null,
+        shippingCompany: null
     })
 
     const dispatch = useDispatch()
@@ -40,7 +43,8 @@ function Cart() {
     } = useSelector(item => item.cart)
     const {
         isFetching,
-        orderId
+        orderId,
+        shipingCompany
     } = useSelector(item => item.order)
 
     useEffect(() => {
@@ -49,9 +53,18 @@ function Cart() {
             if (!_.isEmpty(cartsSult)) {
                 dispatch(ActionCart.loadCart(cartsSult))
             }
+            dispatch(ActionOrder.shipingCompanyRequest())
         }
         loadData()
     }, [])
+
+    useEffect(() => {
+        if (!_.isEmpty(shipingCompany)) {
+            if (shipingCompany[0].id) {
+                onChange('shippingCompany', shipingCompany[0].id)
+            }
+        }
+    }, [shipingCompany])
 
     useEffect(() => {
         if (!_.isEmpty(carts)) {
@@ -68,9 +81,12 @@ function Cart() {
     }, [orderId])
 
     const totalPrice = useCallback(() => {
-        const sum = countItems.reduce((partialSum, a) => partialSum + parseFloat(a.price) * a.quantity, 0)
+        let sum = countItems.reduce((partialSum, a) => partialSum + parseFloat(a.price) * a.quantity, 0)
+        if (optionPay === 1) {
+            sum = sum + parseInt(shipingCompany.find(item => item.id === infomation.shippingCompany).price || 0)
+        }
         return sum;
-    }, [countItems])
+    }, [countItems, infomation.shippingCompany, optionPay])
 
     const onChange = (name, value) => {
         setInfomation({
@@ -82,7 +98,11 @@ function Cart() {
     const fetchApi = useCallback(_.debounce(() => {
         const data = {
             products: countItems,
-            ...infomation
+            ...{
+                ...infomation,
+                shippingAddress: `${infomation.shippingAddress}, ${national}`,
+                shippingCompany: optionPay === 0 ? undefined : infomation.shippingCompany
+            }
         }
         dispatch(ActionOrder.postOrderRequest(data))
     }, 300), [infomation, countItems])
@@ -91,6 +111,14 @@ function Cart() {
         if (!_.isEmpty(countItems)) {
             fetchApi()
         }
+    }
+
+    const onChangeRadio = (event) => {
+        setOptionPay(event.target.value)
+    }
+
+    const onChangeNational = (event) => {
+        setNational(event)
     }
 
     return (
@@ -145,16 +173,38 @@ function Cart() {
                                     }
                                 </tbody>
                             </table>
-                            <div
-                                style={{ textAlign: 'right' }}
-                                className='mt-5 fs-20 fw-500'
-                            >{t.CART.totalPrice}: <span className='g-color-blue'>{func.convertNumber(totalPrice())} PLZ</span></div>
                         </Col>
                         <Col span={24} className="mt-20 fs-20 fw-500 g-color-red text-align-center">
                             <LikeOutlined /> &nbsp;{t.CART.content}!!!
                         </Col>
                         <Row className="mt-20">
-                            <Col sm={6} xs={0} />
+                            <Col sm={12} xs={24}>
+                                <div className="fw-600">{t.CART.paymentMethod}</div>
+                                <Radio.Group value={optionPay} onChange={onChangeRadio}>
+                                    <Space direction="vertical">
+                                        <Radio value={0}>{t.CART.prepay}
+                                            {optionPay === 0 && <div>
+                                                <span>{t.MODAL_INFO.accountNumber}:</span>
+                                                <span className='g-color-blue-black fw-600' style={{ marginLeft: 10 }}>{'89109016940000000141550078'}</span>
+                                            </div>}
+                                        </Radio>
+                                        <Radio value={1}>{t.CART.postpaid}</Radio>
+                                    </Space>
+                                </Radio.Group>
+                                {optionPay === 1 && <div style={{ marginLeft: 25 }}>
+                                    <span>{t.CART.shippingCompany}</span>
+                                    <Select value={infomation.shippingCompany} style={{ width: 200, marginLeft: 10 }} onChange={(e) => onChange('shippingCompany', e)}>
+                                        {
+                                            (shipingCompany || []).map(item => {
+                                                return <Option key={item.id} value={item.id} >{item.name || ''}</Option>
+                                            })
+                                        }
+                                    </Select>
+                                </div>}
+                                <div
+                                    className='mt-5 fs-20 fw-500 mt-20'
+                                >{t.CART.totalPrice}: <span className='g-color-blue'>{func.convertNumber(totalPrice())} PLZ</span></div>
+                            </Col>
                             <Col sm={12} xs={24}>
                                 <Form
                                     name="basic"
@@ -185,6 +235,24 @@ function Cart() {
                                             value={infomation.phone}
                                             onChange={(e) => onChange('phone', e.target.value)}
                                         />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label={t.CART.national}
+                                        name="international"
+                                        rules={[{ required: true, message: 'Please select your Country!' }]}
+                                    >
+                                        <Select
+                                            optionFilterProp="children"
+                                            showSearch
+                                            value={national}
+                                            onChange={onChangeNational}
+                                        >
+                                            {countries.map(country =>
+                                                <Option key={country.name} value={country.name}>
+                                                    {country.name}
+                                                </Option>
+                                            )}
+                                        </Select>
                                     </Form.Item>
                                     <Form.Item
                                         label={t.CART.form.address}
