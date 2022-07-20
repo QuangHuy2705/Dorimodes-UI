@@ -14,9 +14,9 @@ function Product() {
                 <div className='main-header'>
                     <HeaderComponent />
                 </div>
-                <Row style={{ width: '100%' }}>
+                <div style={{ width: '100%' }}>
                     <Products />
-                </Row >
+                </div >
             </div >
 
             <Footer />

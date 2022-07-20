@@ -89,15 +89,15 @@ function HeaderComponent() {
                 render={renderInfo()}
             />
             <Col sm={2} xs={0} />
-            <Col md={3} sm={24} xs={12}>
+            <Col md={3} sm={24} xs={24}>
                 <Link href="/">
                     <Image style={{ cursor: 'pointer' }} alt="" src='/images/logo.png' width={100} height={30} quality={100} />
                 </Link>
             </Col>
-            <Col md={12} sm={14} xs={0}>
+            <Col md={12} sm={14} xs={18}>
                 <nav>
                     <ul>
-                        <li style={{ display: 'inline-block' }}>
+                        <li style={{ display: 'inline-block', marginLeft: 0 }}>
                             <Link href="/">
                                 {t.HOME.home}
                             </Link>
@@ -115,7 +115,7 @@ function HeaderComponent() {
                     </ul>
                 </nav>
             </Col>
-            <Col lg={2} md={4} sm={8} xs={12} style={{ textAlign: 'right' }}>
+            <Col lg={2} md={4} sm={8} xs={6} style={{ textAlign: 'right' }}>
                 <UserOutlined className="cart-header" onClick={openInfomation} />
                 <Link href="/cart">
                     <Badge count={!_.isEmpty(countItems) ? countItems.length : null} overflowCount={9}>

@@ -82,15 +82,10 @@
         margin-left: 0px;
     }
 
-    @media screen and (max-width: 768px) {
-        .container {
-            width: 750px;
-        }
-    }
 
-    @media screen and (max-width: 992px) {
+    @media screen and (min-width: 1450px) {
         .container {
-            width: 970px;
+            width: 1170px;
         }
     }
 
@@ -100,9 +95,15 @@
         }
     }
 
-    @media screen and (min-width: 1450px) {
+    @media screen and (max-width: 992px) {
         .container {
-            width: 1170px;
+            width: 970px;
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .container {
+            width: 100%;
         }
     }
 }

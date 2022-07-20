@@ -177,7 +177,7 @@ function Cart() {
                         <Col span={24} className="mt-20 fs-20 fw-500 g-color-red text-align-center">
                             <LikeOutlined /> &nbsp;{t.CART.content}!!!
                         </Col>
-                        <Row className="mt-20">
+                        <Row className="mt-20" style={{ padding: '1em' }}>
                             <Col sm={12} xs={24}>
                                 <div className="fw-600">{t.CART.paymentMethod}</div>
                                 <Radio.Group value={optionPay} onChange={onChangeRadio}>
