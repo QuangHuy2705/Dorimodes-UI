@@ -42,6 +42,7 @@ export default {
     totalPrice: 'Total Price',
     content: 'Please pay and send confirmation to purchase',
     form: {
+      facebook: 'Facebook',
       fullname: 'Full name',
       phone: 'Phone',
       address: 'Address',

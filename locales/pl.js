@@ -42,6 +42,7 @@ export default {
     totalPrice: 'Całkowita cena',
     content: 'Proszę zapłacić i wysłać potwierdzenie zakupu',
     form: {
+      facebook: 'Facebook',
       fullname: 'Nazwa',
       phone: 'Numer telefonu',
       address: 'Adres zamieszkania',

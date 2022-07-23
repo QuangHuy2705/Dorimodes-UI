@@ -42,6 +42,7 @@ export default {
     totalPrice: 'Tổng tiền',
     content: 'Vui lòng thanh toán và gửi xác nhận để mua hàng',
     form: {
+      facebook: 'Facebook',
       fullname: 'Họ và tên',
       phone: 'Số điện thoại',
       address: 'Địa chỉ',
