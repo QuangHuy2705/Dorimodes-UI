@@ -53,12 +53,12 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                     }
                 </Col>
                 <Col span={12} xs={24}>
-                    <b className='fs-20'>{data.name[locale]}</b>
+                    <b className='fs-20'>{`${data.name[locale]} ${data.code && `(${data.code})`}`}</b>
                     <div className='mt-5'>
                         {t.DETAIL.status}: <Button type='primary' size='small' icon={<CheckOutlined />}>{t.DETAIL.statusType}</Button>
                     </div>
                     <div className='fs-22 g-color-blue mt-20'>
-                        {data.price} PLZ
+                        {`${data.price} ${data.quantity && `(x${data.quantity})`}`} ZŁ
                     </div>
                     <div className='border-bottom-width' />
                     <div className='g-color-black'>
@@ -111,6 +111,7 @@ const DetailCategory = ({ title = '', data = null, isVisible = false, onClose = 
                             disabled={!size}
                             onClick={() => onAddToCartDetail({
                                 ...data,
+                                itemQuantity: data.quantity,
                                 quantity: quantity,
                                 size: size
                             })}

@@ -19,7 +19,7 @@ export default {
         home: 'Home',
         allProducts: 'All of the products',
         sortBy: 'Sort by price',
-        searchByName: 'Search by name',
+        searchByName: 'Search by code',
         category: 'Category',
         default: 'Default',
         lowToHigh: 'Low to high',

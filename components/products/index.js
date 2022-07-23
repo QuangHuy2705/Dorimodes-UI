@@ -112,7 +112,7 @@ function Products() {
             }
         }
         if (valueSortByName) {
-            arrTmp = arrTmp.filter(item => (item.name[locale]).toLowerCase().includes(valueSortByName.toLowerCase()))
+            arrTmp = arrTmp.filter(item => (item.code).toLowerCase().includes(valueSortByName.toLowerCase()))
         }
         setProductSort(arrTmp)
         setCurrentPage(1)

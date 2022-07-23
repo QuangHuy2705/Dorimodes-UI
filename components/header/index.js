@@ -63,9 +63,10 @@ function HeaderComponent() {
                 <Timeline>
                     <Timeline.Item color="green">{t.MODAL_INFO.fullname}:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'Dung Nguyen'}</span></Timeline.Item>
                     <Timeline.Item color="green">{t.CART.form.phone}:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'+48 579172183'}</span></Timeline.Item>
-                    <Timeline.Item color="green">
-                        {t.MODAL_INFO.accountNumber}:&nbsp;&nbsp;
-                        <span className="fw-500 g-color-blue-black">{'89109016940000000141550078'}</span> <br />
+                    <Timeline.Item color="green">{t.CART.form.phone}:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'729547602'}</span></Timeline.Item>
+                    {/* <Timeline.Item color="green"> */}
+                        {/* {t.MODAL_INFO.accountNumber}:&nbsp;&nbsp;
+                        <span className="fw-500 g-color-blue-black">{'89109016940000000141550078'}</span> <br /> */}
                         {/* <div style={{ marginLeft: 20 }}>
                             {t.MODAL_INFO.nameOfBank}:&nbsp;&nbsp;
                             <span className="fw-500 g-color-blue-black">{'SANTANDER'}</span> <br />
@@ -74,7 +75,7 @@ function HeaderComponent() {
                             {t.MODAL_INFO.branchName}:&nbsp;&nbsp;
                             <span className="fw-500 g-color-blue-black">{'Nam Kỳ Khởi Nghĩa - Quận 1 - TPHCM'}</span> <br />
                         </div> */}
-                    </Timeline.Item>
+                    {/* </Timeline.Item> */}
                     {/* <Timeline.Item color="green">{t.MODAL_INFO.address}:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'3 Lê Văn Huân - Tân Bình - TPHCM'}</span></Timeline.Item> */}
                 </Timeline>
             </div>
@@ -88,13 +89,12 @@ function HeaderComponent() {
                 onClose={closeModalInfo}
                 render={renderInfo()}
             />
-            <Col sm={2} xs={0} />
-            <Col md={3} sm={24} xs={24}>
+            <Col className='logo-container' md={3} sm={24} xs={0}>
                 <Link href="/">
-                    <Image style={{ cursor: 'pointer' }} alt="" src='/images/logo.png' width={100} height={30} quality={100} />
+                    <Image style={{ cursor: 'pointer' }} alt="" src='/images/logo1.png' width={100} height={100} quality={100} />
                 </Link>
             </Col>
-            <Col md={12} sm={14} xs={18}>
+            <Col md={12} sm={14} xs={11}>
                 <nav>
                     <ul>
                         <li style={{ display: 'inline-block', marginLeft: 0 }}>
@@ -107,23 +107,21 @@ function HeaderComponent() {
                                 {t.HOME.products}
                             </Link>
                         </li>
-                        <li>
+                        {/* <li>
                             <Link href="/about">
                                 {t.HOME.aboutUs}
                             </Link>
-                        </li>
+                        </li> */}
                     </ul>
                 </nav>
             </Col>
-            <Col lg={2} md={4} sm={8} xs={6} style={{ textAlign: 'right' }}>
+            <Col lg={2} md={4} sm={8}  style={{ textAlign: 'right', display: 'flex', alignItems: 'center' }}>
                 <UserOutlined className="cart-header" onClick={openInfomation} />
                 <Link href="/cart">
                     <Badge count={!_.isEmpty(countItems) ? countItems.length : null} overflowCount={9}>
                         <ShoppingCartOutlined className="cart-header ml-15" />
                     </Badge>
                 </Link>
-            </Col>
-            <Col lg={5} md={4} xs={24}>
                 <div className="navbar">
                     {locales.map((l, i) => {
                         return (
@@ -136,6 +134,9 @@ function HeaderComponent() {
                     })}
                 </div>
             </Col>
+            {/* <Col lg={5} md={4} xs={24}>
+
+            </Col> */}
         </Row>
     )
 }

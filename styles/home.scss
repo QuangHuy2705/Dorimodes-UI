@@ -13,7 +13,10 @@
         width: 100%;
 
         @media screen and (max-width: 768px) {
-            display: none;
+            // display: none;
+            height: 100px;
+            width: 100%;
+            background-size: cover;
         }
     }
 }
@@ -26,7 +29,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 0 20px;
     width: 80%;
 
     nav {
@@ -191,6 +194,10 @@ button:disabled {
     }
 }
 
+.logo-container {
+
+}
+
 .navbar {
     display: flex;
     justify-content: center;
@@ -199,7 +206,7 @@ button:disabled {
 }
 
 .navbar span {
-    margin-right: 20px;
+    margin-left: 10px;
     text-transform: uppercase;
     padding: 5px 8px;
 }
@@ -239,12 +246,25 @@ button:disabled {
 
 
 @media screen and (max-width: 768px) {
+    .logo-container {
+        // display: hidden;
+        // width: 0 !important;
+    }
     .container {
         width: 750px;
     }
 
     .bikini-header {
         width: 100%;
+        padding: 20px 0;
+        
+        nav {
+            li {
+                a {
+                    font-weight: bold !important;
+                }
+            }
+        }
     }
 
     .main-header {

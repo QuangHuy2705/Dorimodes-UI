@@ -32,6 +32,7 @@ function Category(props) {
             size: data.size[0] || null,
             color: data.color[0] || null,
             quantity: 1,
+            itemQuantity: data.quantity || 1,
             name: data.name,
             price: data.price || 0
         }
@@ -43,6 +44,7 @@ function Category(props) {
             id: data.id,
             size: data.size || null,
             color: data.color || null,
+            itemQuantity: data.itemQuantity || 1,
             quantity: data.quantity || 1,
             name: data.name,
             price: data.price || 0
@@ -83,10 +85,10 @@ function Category(props) {
             </div>
             <div className='fw-500 text-align-center mt-10 fs-16 '>
                 <div className='g-color-black'>
-                    {data.name[locale]}
+                {`${data.name[locale]} ${data.code && `(${data.code})`}`}
                 </div>
                 <div className='g-color-blue'>
-                    {data.price} PLZ
+                    {`${data.price} ${data.quantity && `(x${data.quantity})`}`} ZŁ
                 </div>
             </div>
         </>

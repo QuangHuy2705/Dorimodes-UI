@@ -46,6 +46,7 @@ const addToCart = (data) => {
             size: data.size || null,
             quantity: data.quantity || null,
             name: data.name,
+            itemQuantity: data.itemQuantity || 1,
             price: data.price | 0
         }
         stored.push(nomarlize)

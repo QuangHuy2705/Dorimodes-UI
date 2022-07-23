@@ -9,7 +9,7 @@ module.exports = {
     return [
       {
         source: '/v1/:path*/',
-        destination: 'http://localhost:6000/v1/:path*/',
+        destination: 'http://localhost:5000/v1/:path*/',
       },
     ]
   }

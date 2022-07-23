@@ -36,7 +36,6 @@ function Cart() {
         phone: null,
         shippingCompany: null
     })
-
     const dispatch = useDispatch()
     const {
         carts,
@@ -79,12 +78,9 @@ function Cart() {
             router.push(`order-result/${orderId}`)
         }
     }, [orderId])
-
     const totalPrice = useCallback(() => {
-        let sum = countItems.reduce((partialSum, a) => partialSum + parseFloat(a.price) * a.quantity, 0)
-        if (optionPay === 1) {
-            sum = sum + parseInt(shipingCompany.find(item => item.id === infomation.shippingCompany).price || 0)
-        }
+        let sum = countItems.reduce((partialSum, a) => partialSum + parseFloat(a.price) * a.quantity * a.itemQuantity, 0)
+        sum = sum + parseInt(shipingCompany.find(item => item.id === infomation.shippingCompany)?.price || 0)
         return sum;
     }, [countItems, infomation.shippingCompany, optionPay])
 
@@ -94,16 +90,17 @@ function Cart() {
             [name]: value
         })
     }
-
     const fetchApi = useCallback(_.debounce(() => {
         const data = {
             products: countItems,
             ...{
                 ...infomation,
                 shippingAddress: `${infomation.shippingAddress}, ${national}`,
-                shippingCompany: optionPay === 0 ? undefined : infomation.shippingCompany
+                shippingCompany: infomation.shippingCompany,
+                total: func.convertNumber(totalPrice())
             }
         }
+        console.log(data)
         dispatch(ActionOrder.postOrderRequest(data))
     }, 300), [infomation, countItems])
 
@@ -146,13 +143,13 @@ function Cart() {
                                 </thead>
 
                                 <tbody>
-                                    {
+                                    {   
                                         !_.isEmpty(countItems) ?
                                             countItems.map((item, idx) => <tr key={idx}>
                                                 <td>{item?.name[locale]} (size: {item.size})</td>
-                                                <td>{item?.price}</td>
+                                                <td>{`${item?.price} ${item.itemQuantity ? `(x${item.itemQuantity})` : `(x1)`}`}</td>
                                                 <td>{item.quantity}</td>
-                                                <td>{func.convertNumber(parseFloat(item.price | 0) * item.quantity)}</td>
+                                                <td>{func.convertNumber(parseFloat(item.price | 0) * item.itemQuantity * item.quantity)}</td>
                                                 <td style={{ textAlign: 'center' }}>
                                                     <Popconfirm
                                                         title="Are you sure to delete this product?"
@@ -179,7 +176,7 @@ function Cart() {
                         </Col>
                         <Row className="mt-20" style={{ padding: '1em' }}>
                             <Col sm={12} xs={24}>
-                                <div className="fw-600">{t.CART.paymentMethod}</div>
+                                {/* <div className="fw-600">{t.CART.paymentMethod}</div>
                                 <Radio.Group value={optionPay} onChange={onChangeRadio}>
                                     <Space direction="vertical">
                                         <Radio value={0}>{t.CART.prepay}
@@ -190,8 +187,8 @@ function Cart() {
                                         </Radio>
                                         <Radio value={1}>{t.CART.postpaid}</Radio>
                                     </Space>
-                                </Radio.Group>
-                                {optionPay === 1 && <div style={{ marginLeft: 25 }}>
+                                </Radio.Group> */}
+                                <div>
                                     <span>{t.CART.shippingCompany}</span>
                                     <Select value={infomation.shippingCompany} style={{ width: 200, marginLeft: 10 }} onChange={(e) => onChange('shippingCompany', e)}>
                                         {
@@ -200,7 +197,7 @@ function Cart() {
                                             })
                                         }
                                     </Select>
-                                </div>}
+                                </div>
                                 <div
                                     className='mt-5 fs-20 fw-500 mt-20'
                                 >{t.CART.totalPrice}: <span className='g-color-blue'>{func.convertNumber(totalPrice())} PLZ</span></div>

@@ -25,10 +25,8 @@ const ResultSucess = () => {
                 <Timeline>
                     <Timeline.Item color="green">{t.MODAL_INFO.fullname}:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'Dung Nguyen'}</span></Timeline.Item>
                     <Timeline.Item color="green">{t.CART.form.phone}:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'+48 579172183'}</span></Timeline.Item>
-                    <Timeline.Item color="green">
-                        {t.MODAL_INFO.accountNumber}:&nbsp;&nbsp;
-                        <span className="fw-500 g-color-blue-black">{'89109016940000000141550078'}</span> <br />
-                    </Timeline.Item>
+                    <Timeline.Item color="green">{t.CART.form.phone}:&nbsp;&nbsp;<span className="fw-500 g-color-blue-black">{'729547602'}</span></Timeline.Item>
+
                 </Timeline>
             </div>
         </>
