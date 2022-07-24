@@ -54,7 +54,7 @@ const COLOR_CONFIGS = [
 function Products() {
   const slideImages = [
     {
-      url: '/images/background/slider_1.png'
+      url: `/images/background/slider_1.png`
     },
     {
       url: '/images/background/product.jpeg'
