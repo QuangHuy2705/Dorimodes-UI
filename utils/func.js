@@ -1,4 +1,5 @@
 import { notification, Modal, } from 'antd'
+import _ from 'lodash';
 
 const { confirm } = Modal;
 
@@ -47,7 +48,18 @@ const addToCart = (data) => {
             quantity: data.quantity || null,
             name: data.name,
             itemQuantity: data.itemQuantity || 1,
-            price: data.price | 0
+            price: parseFloat(data.price || 0)
+        }
+        if(!_.isEmpty(stored)){
+            const findIndex = stored.findIndex(item=> item.id === data.id)
+            if(findIndex > -1){
+                stored[findIndex].quantity = stored[findIndex].quantity + data.quantity
+                stored[findIndex].price = parseFloat(stored[findIndex].price || 0) + parseFloat(data.price || 0)
+                stored[findIndex].itemQuantity = stored[findIndex].itemQuantity || 1 + data.itemQuantity || 1
+                console.log(stored, " stored parse")
+                localStorage.setItem(KEY_CART_STORAGE, JSON.stringify(stored))
+                return
+            }
         }
         stored.push(nomarlize)
         localStorage.setItem(KEY_CART_STORAGE, JSON.stringify(stored))
