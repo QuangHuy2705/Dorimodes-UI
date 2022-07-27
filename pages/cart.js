@@ -16,7 +16,9 @@ import {
   LikeOutlined,
   PhoneOutlined,
   UserOutlined,
-  DeleteOutlined
+  DeleteOutlined,
+  PlusCircleFilled,
+  MinusCircleFilled
 } from '@ant-design/icons'
 import func from '../utils/func'
 import { countries } from '../utils/countries'
@@ -97,6 +99,36 @@ function Cart() {
       setCountItems([])
     }
   }, [carts])
+
+  const onQuantityChange = (item, isInc) => {
+    if (isInc) {
+      setCountItems(
+        countItems.map((i) => {
+          if (i.id == item.id) {
+            return {
+              ...i,
+              quantity: i.quantity + 1
+            }
+          }
+        })
+      )
+    } else {
+      if (countItems.find((i) => i.id == item.id)?.quantity - 1 == 0) {
+        setCountItems(countItems.filter((i) => i.id != item.id))
+      } else {
+        setCountItems(
+          countItems.map((i) => {
+            if (i.id == item.id) {
+              return {
+                ...i,
+                quantity: i.quantity - 1
+              }
+            }
+          })
+        )
+      }
+    }
+  }
 
   useEffect(() => {
     if (orderId) {
@@ -213,7 +245,24 @@ function Cart() {
                         <td>{`${item?.price} ${
                           item.itemQuantity ? `(x${item.itemQuantity})` : `(x1)`
                         }`}</td>
-                        <td>{item.quantity}</td>
+                        <td
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between'
+                          }}
+                        >
+                          {item.quantity}
+                          <div>
+                            <PlusCircleFilled
+                              onClick={() => onQuantityChange(item, true)}
+                              style={{ marginRight: '5px', cursor: 'pointer' }}
+                            />
+                            <MinusCircleFilled
+                              onClick={() => onQuantityChange(item, false)}
+                              style={{ cursor: 'pointer' }}
+                            />
+                          </div>
+                        </td>
                         <td>
                           {func.convertNumber(
                             parseFloat(item.price | 0) *
