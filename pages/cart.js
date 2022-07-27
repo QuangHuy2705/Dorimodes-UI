@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import HeaderComponent from "../components/header";
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import HeaderComponent from '../components/header'
 import {
   Row,
   Col,
@@ -9,8 +9,8 @@ import {
   Radio,
   Popconfirm,
   Space,
-  Select,
-} from "antd";
+  Select
+} from 'antd'
 import {
   ShoppingOutlined,
   LikeOutlined,
@@ -18,144 +18,114 @@ import {
   UserOutlined,
   DeleteOutlined,
   MinusCircleOutlined,
-  PlusCircleOutlined,
-} from "@ant-design/icons";
-import func from "../utils/func";
-import { countries } from "../utils/countries";
-import cities from "../utils/city_data";
-import provinces from "../utils/provinces.pl";
-import { useDispatch, useSelector } from "react-redux";
-import { getLanguage } from "../utils/laguage";
-import { Actions as ActionCart } from "../redux/reducers/cart";
-import { Actions as ActionOrder } from "../redux/reducers/order";
-import { useRouter } from "next/router";
-import _ from "lodash";
-import Link from "next/link";
-import Footer from "../components/Footer";
-import styles from "../styles/Home.module.css";
+  PlusCircleOutlined
+} from '@ant-design/icons'
+import func from '../utils/func'
+import { countries } from '../utils/countries'
+import cities from '../utils/city_data'
+import provinces from '../utils/provinces.pl'
+import { useDispatch, useSelector } from 'react-redux'
+import { getLanguage } from '../utils/laguage'
+import { Actions as ActionCart } from '../redux/reducers/cart'
+import { Actions as ActionOrder } from '../redux/reducers/order'
+import { useRouter } from 'next/router'
+import _ from 'lodash'
+import Link from 'next/link'
+import Footer from '../components/Footer'
+import styles from '../styles/Home.module.css'
 
-const { TextArea } = Input;
-const { Option } = Select;
+const { TextArea } = Input
+const { Option } = Select
 
 function Cart() {
-  const { locale } = useRouter();
-  const router = useRouter();
-  const t = getLanguage();
-  const [countItems, setCountItems] = useState([]);
-  const [optionPay, setOptionPay] = useState(0);
-  const [national, setNational] = useState("Poland");
-  const [province, setProvince] = useState("");
-  const [city, setCity] = useState("");
+  const { locale } = useRouter()
+  const router = useRouter()
+  const t = getLanguage()
+  const [countItems, setCountItems] = useState([])
+  const [optionPay, setOptionPay] = useState(0)
+  const [national, setNational] = useState('Poland')
+  const [province, setProvince] = useState('')
+  const [city, setCity] = useState('')
   const [infomation, setInfomation] = useState({
-    shippingAddress: "",
-    userName: "",
+    shippingAddress: '',
+    userName: '',
     phone: null,
     shippingCompany: null,
-    zipCode: "",
-  });
-  const dispatch = useDispatch();
-  const { carts } = useSelector((item) => item.cart);
+    zipCode: ''
+  })
+  const dispatch = useDispatch()
+  const { carts } = useSelector((item) => item.cart)
   const { isFetching, orderId, shipingCompany } = useSelector(
     (item) => item.order
-  );
+  )
 
   const provinceOptions = useMemo(() => {
-    if (national == "Poland") {
-      return provinces;
+    if (national == 'Poland') {
+      return provinces
     }
-    return [];
-  }, [national]);
+    return []
+  }, [national])
 
   const cityOptions = useMemo(() => {
     if (!province) {
-      return [];
+      return []
     }
-    return cities[province];
-  }, [province]);
+    return cities[province]
+  }, [province])
 
   useEffect(() => {
-    const cartsSult = func.getCartCurrent();
+    const cartsSult = func.getCartCurrent()
     function loadData() {
       if (!_.isEmpty(cartsSult)) {
-        dispatch(ActionCart.loadCart(cartsSult));
+        dispatch(ActionCart.loadCart(cartsSult))
       }
-      dispatch(ActionOrder.shipingCompanyRequest());
+      dispatch(ActionOrder.shipingCompanyRequest())
     }
-    loadData();
-  }, []);
+    loadData()
+  }, [])
 
   useEffect(() => {
     if (!_.isEmpty(shipingCompany)) {
       if (shipingCompany[0].id) {
-        onChange("shippingCompany", shipingCompany[0].id);
+        onChange('shippingCompany', shipingCompany[0].id)
       }
     }
-  }, [shipingCompany]);
+  }, [shipingCompany])
 
   useEffect(() => {
     if (!_.isEmpty(carts)) {
-      setCountItems(carts);
+      setCountItems(carts)
     } else {
-      setCountItems([]);
+      setCountItems([])
     }
-  }, [carts]);
-
-  const onQuantityChange = (item, isInc) => {
-    if (isInc) {
-      setCountItems(
-        countItems.map((i) => {
-          if (i.id == item.id) {
-            return {
-              ...i,
-              quantity: i.quantity + 1,
-            };
-          }
-        })
-      );
-    } else {
-      if (countItems.find((i) => i.id == item.id)?.quantity - 1 == 0) {
-        setCountItems(countItems.filter((i) => i.id != item.id));
-      } else {
-        setCountItems(
-          countItems.map((i) => {
-            if (i.id == item.id) {
-              return {
-                ...i,
-                quantity: i.quantity - 1,
-              };
-            }
-          })
-        );
-      }
-    }
-  };
+  }, [carts])
 
   useEffect(() => {
     if (orderId) {
-      router.push(`order-result/${orderId}`);
+      router.push(`order-result/${orderId}`)
     }
-  }, [orderId]);
+  }, [orderId])
   const totalPrice = useCallback(() => {
     let sum = countItems.reduce(
       (partialSum, a) =>
         partialSum + parseFloat(a.price) * a.quantity * a.itemQuantity,
       0
-    );
+    )
     sum =
       sum +
       parseInt(
         shipingCompany.find((item) => item.id === infomation.shippingCompany)
           ?.price || 0
-      );
-    return sum;
-  }, [countItems, infomation.shippingCompany, optionPay]);
+      )
+    return sum
+  }, [countItems, infomation.shippingCompany, optionPay])
 
   const onChange = (name, value) => {
     setInfomation({
       ...infomation,
-      [name]: value,
-    });
-  };
+      [name]: value
+    })
+  }
   const fetchApi = useCallback(
     _.debounce(() => {
       const data = {
@@ -164,57 +134,57 @@ function Cart() {
           ...infomation,
           shippingAddress: `${infomation.shippingAddress}, ${city}, ${province}, ${infomation.zipCode}, ${national}`,
           shippingCompany: infomation.shippingCompany,
-          total: func.convertNumber(totalPrice()),
-        },
-      };
-      console.log(data);
-      dispatch(ActionOrder.postOrderRequest(data));
+          total: func.convertNumber(totalPrice())
+        }
+      }
+      console.log(data)
+      dispatch(ActionOrder.postOrderRequest(data))
     }, 300),
     [infomation, countItems]
-  );
+  )
 
   const onSubmit = () => {
     if (!_.isEmpty(countItems)) {
-      fetchApi();
+      fetchApi()
     }
-  };
+  }
 
   const onChangeRadio = (event) => {
-    setOptionPay(event.target.value);
-  };
+    setOptionPay(event.target.value)
+  }
 
   const changeProductCart = (actionType, item) => {
-    dispatch(ActionCart.changeProductCart(actionType, item));
-  };
+    dispatch(ActionCart.changeProductCart(actionType, item))
+  }
 
   const onChangeNational = (event) => {
-    setNational(event);
-  };
+    setNational(event)
+  }
 
   const onChangeProvince = (event) => {
-    setProvince(event);
-  };
+    setProvince(event)
+  }
 
   const onChangeCity = (event) => {
-    setCity(event);
-  };
+    setCity(event)
+  }
 
   return (
     <div className={styles.container}>
       <div
         className="flex-align-center"
-        style={{ flexDirection: "column", alignItems: "center" }}
+        style={{ flexDirection: 'column', alignItems: 'center' }}
       >
         <div className="main-header">
           <HeaderComponent />
         </div>
-        <Row style={{ width: "100%" }}>
+        <Row style={{ width: '100%' }}>
           <Col sm={6} xs={0} />
           <Col sm={12} xs={24}>
             <Col span={24} className="table-cart mt-10">
               <div>
                 <ShoppingOutlined
-                  style={{ color: "rgb(5, 112, 218)", fontSize: 20 }}
+                  style={{ color: 'rgb(5, 112, 218)', fontSize: 20 }}
                 />
                 &nbsp;
                 <span style={{ fontSize: 18 }}>
@@ -249,16 +219,23 @@ function Cart() {
                         <td>{`${item?.price} ${
                           item.itemQuantity ? `(x${item.itemQuantity})` : `(x1)`
                         }`}</td>
-                        <td>
-                          <MinusCircleOutlined
-                            style={{ cursor: "pointer" }}
-                            onClick={() => changeProductCart("minus", item)}
-                          />
-                          &nbsp;{item.quantity}&nbsp;
-                          <PlusCircleOutlined
-                            style={{ cursor: "pointer" }}
-                            onClick={() => changeProductCart("plus", item)}
-                          />
+                        <td
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between'
+                          }}
+                        >
+                          {item.quantity}
+                          <div>
+                            <MinusCircleOutlined
+                              style={{ cursor: 'pointer' }}
+                              onClick={() => changeProductCart('minus', item)}
+                            />
+                            <PlusCircleOutlined
+                              style={{ cursor: 'pointer', marginLeft: '5px' }}
+                              onClick={() => changeProductCart('plus', item)}
+                            />
+                          </div>
                         </td>
                         <td>
                           {func.convertNumber(
@@ -267,11 +244,11 @@ function Cart() {
                               item.quantity
                           )}
                         </td>
-                        <td style={{ textAlign: "center" }}>
+                        <td style={{ textAlign: 'center' }}>
                           <Popconfirm
                             title="Are you sure to delete this product?"
                             onConfirm={() => {
-                              dispatch(ActionCart.removeFromCart(idx));
+                              dispatch(ActionCart.removeFromCart(idx))
                             }}
                             onCancel={() => {}}
                             okText="Yes"
@@ -279,9 +256,9 @@ function Cart() {
                           >
                             <DeleteOutlined
                               style={{
-                                color: "red",
-                                cursor: "pointer",
-                                fontSize: 16,
+                                color: 'red',
+                                cursor: 'pointer',
+                                fontSize: 16
                               }}
                             />
                           </Popconfirm>
@@ -304,7 +281,7 @@ function Cart() {
             >
               <LikeOutlined /> &nbsp;{t.CART.content}!!!
             </Col>
-            <Row className="mt-20" style={{ padding: "1em" }}>
+            <Row className="mt-20" style={{ padding: '1em' }}>
               <Col sm={12} xs={24}>
                 {/* <div className="fw-600">{t.CART.paymentMethod}</div>
                                 <Radio.Group value={optionPay} onChange={onChangeRadio}>
@@ -323,19 +300,19 @@ function Cart() {
                   <Select
                     value={infomation.shippingCompany}
                     style={{ width: 200, marginLeft: 10 }}
-                    onChange={(e) => onChange("shippingCompany", e)}
+                    onChange={(e) => onChange('shippingCompany', e)}
                   >
                     {(shipingCompany || []).map((item) => {
                       return (
                         <Option key={item.id} value={item.id}>
-                          {item.name || ""}
+                          {item.name || ''}
                         </Option>
-                      );
+                      )
                     })}
                   </Select>
                 </div>
                 <div className="mt-5 fs-20 fw-500 mt-20">
-                  {t.CART.totalPrice}:{" "}
+                  {t.CART.totalPrice}:{' '}
                   <span className="g-color-blue">
                     {func.convertNumber(totalPrice())} PLZ
                   </span>
@@ -354,15 +331,15 @@ function Cart() {
                     rules={[
                       {
                         required: true,
-                        message: "Please input your username!",
-                      },
+                        message: 'Please input your username!'
+                      }
                     ]}
                   >
                     <Input
                       className="custom-input"
                       prefix={<UserOutlined />}
                       value={infomation.userName}
-                      onChange={(e) => onChange("userName", e.target.value)}
+                      onChange={(e) => onChange('userName', e.target.value)}
                     />
                   </Form.Item>
                   <Form.Item
@@ -371,15 +348,15 @@ function Cart() {
                     rules={[
                       {
                         required: true,
-                        message: "Please input your phone number!",
-                      },
+                        message: 'Please input your phone number!'
+                      }
                     ]}
                   >
                     <Input
                       className="custom-input"
                       prefix={<PhoneOutlined />}
                       value={infomation.phone}
-                      onChange={(e) => onChange("phone", e.target.value)}
+                      onChange={(e) => onChange('phone', e.target.value)}
                     />
                   </Form.Item>
                   <Form.Item
@@ -388,8 +365,8 @@ function Cart() {
                     rules={[
                       {
                         required: true,
-                        message: "Please select your Country!",
-                      },
+                        message: 'Please select your Country!'
+                      }
                     ]}
                   >
                     <Select
@@ -411,8 +388,8 @@ function Cart() {
                     rules={[
                       {
                         required: true,
-                        message: "This is required!",
-                      },
+                        message: 'This is required!'
+                      }
                     ]}
                   >
                     <Select
@@ -434,8 +411,8 @@ function Cart() {
                     rules={[
                       {
                         required: true,
-                        message: "This is required!",
-                      },
+                        message: 'This is required!'
+                      }
                     ]}
                   >
                     <Select
@@ -457,14 +434,14 @@ function Cart() {
                     rules={[
                       {
                         required: true,
-                        message: "This is required!",
-                      },
+                        message: 'This is required!'
+                      }
                     ]}
                   >
                     <Input
                       className="custom-input"
                       value={infomation.zipCode}
-                      onChange={(e) => onChange("zipCode", e.target.value)}
+                      onChange={(e) => onChange('zipCode', e.target.value)}
                     />
                   </Form.Item>
                   <Form.Item
@@ -473,8 +450,8 @@ function Cart() {
                     rules={[
                       {
                         required: true,
-                        message: "Please input your address!",
-                      },
+                        message: 'Please input your address!'
+                      }
                     ]}
                   >
                     <TextArea
@@ -483,13 +460,13 @@ function Cart() {
                       placeholder="Your address"
                       value={infomation.shippingAddress}
                       onChange={(e) =>
-                        onChange("shippingAddress", e.target.value)
+                        onChange('shippingAddress', e.target.value)
                       }
                     />
                   </Form.Item>
                   <Form.Item
                     wrapperCol={{ sm: { offset: 8, span: 16 } }}
-                    style={{ textAlign: "right" }}
+                    style={{ textAlign: 'right' }}
                   >
                     <Button
                       type="primary"
@@ -508,7 +485,7 @@ function Cart() {
       </div>
       <Footer />
     </div>
-  );
+  )
 }
 
-export default Cart;
+export default Cart
