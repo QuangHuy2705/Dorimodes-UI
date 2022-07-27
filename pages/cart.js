@@ -100,6 +100,36 @@ function Cart() {
     }
   }, [carts]);
 
+  const onQuantityChange = (item, isInc) => {
+    if (isInc) {
+      setCountItems(
+        countItems.map((i) => {
+          if (i.id == item.id) {
+            return {
+              ...i,
+              quantity: i.quantity + 1,
+            };
+          }
+        })
+      );
+    } else {
+      if (countItems.find((i) => i.id == item.id)?.quantity - 1 == 0) {
+        setCountItems(countItems.filter((i) => i.id != item.id));
+      } else {
+        setCountItems(
+          countItems.map((i) => {
+            if (i.id == item.id) {
+              return {
+                ...i,
+                quantity: i.quantity - 1,
+              };
+            }
+          })
+        );
+      }
+    }
+  };
+
   useEffect(() => {
     if (orderId) {
       router.push(`order-result/${orderId}`);
