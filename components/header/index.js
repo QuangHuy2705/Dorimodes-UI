@@ -124,11 +124,9 @@ function HeaderComponent() {
             <li>
               <Link href="/products">{t.HOME.products}</Link>
             </li>
-            {/* <li>
-                            <Link href="/about">
-                                {t.HOME.aboutUs}
-                            </Link>
-                        </li> */}
+            <li>
+              <Link href="/about">{t.HOME.aboutUs}</Link>
+            </li>
           </ul>
         </nav>
       </Col>
