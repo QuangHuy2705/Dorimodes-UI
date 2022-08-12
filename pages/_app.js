@@ -6,6 +6,7 @@ import store from '../redux/index'
 import { Provider } from 'react-redux'
 
 function MyApp({ Component, pageProps }) {
+  console.log('deploy')
   return (
     <Provider store={store}>
       <Component {...pageProps} />
