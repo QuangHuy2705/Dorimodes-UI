@@ -7,7 +7,8 @@ import {
   Checkbox,
   Collapse,
   Input,
-  List
+  List,
+  Spin
 } from 'antd'
 import { LeftOutlined } from '@ant-design/icons'
 import { useSelector, useDispatch } from 'react-redux'
@@ -18,6 +19,7 @@ import { getLanguage } from '../../utils/laguage'
 import _ from 'lodash'
 import 'react-slideshow-image/dist/styles.css'
 import { Slide } from 'react-slideshow-image'
+import api from '../../redux/services/api'
 
 const { Option } = Select
 const { Panel } = Collapse
@@ -52,17 +54,6 @@ const COLOR_CONFIGS = [
 ]
 
 function Products() {
-  const slideImages = [
-    {
-      url: `/images/background/slider_1.png`
-    },
-    {
-      url: '/images/background/product.jpeg'
-    },
-    {
-      url: '/images/background/slide4.jpeg'
-    }
-  ]
   const t = getLanguage()
   const { locale } = useRouter()
   const [productsSort, setProductSort] = useState([])
@@ -78,6 +69,23 @@ function Products() {
   const { products, isFetching } = useSelector((state) => state.product)
   const dispatch = useDispatch()
   const { categories, sizes } = useSelector((state) => state.category)
+  const [background, setBackground] = useState([])
+
+  const [loading, setLoading] = useState(true)
+
+  const getBackground = async () => {
+    const data = await api.get('/background')
+    if (data.status == 200 && data.data.length > 0) {
+      setBackground(data.data.map((i) => i.image))
+      setLoading(false)
+    } else {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    getBackground()
+  }, [])
 
   useEffect(() => {
     setProductSort(products)
@@ -214,144 +222,158 @@ function Products() {
 
   return (
     <>
-      <Slide>
-        {slideImages.map((slideImage, index) => (
-          <div className="each-slide" key={index}>
-            <div
-              style={{
-                backgroundImage: `url(${slideImage.url})`,
-                height: '500px',
-                width: '100%',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'none',
-                backgroundSize: 'cover'
-              }}
-            ></div>
-          </div>
-        ))}
-      </Slide>
-      <div className="wrapper-product-container">
-        {/* <div className='background-product mt-0' /> */}
-        <div className="banner-content">
-          <div className="content-text">{t.PRODUCTS.allProductsTitle}</div>
-          <Breadcrumb>
-            <Breadcrumb.Item>{t.PRODUCTS.home}</Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a>{t.PRODUCTS.allProducts}</a>
-            </Breadcrumb.Item>
-          </Breadcrumb>
+      {loading ? (
+        <div style={{ textAlign: 'center', padding: '200px 0' }}>
+          <Spin size="large" style={{ margin: 'auto' }} />
         </div>
-        <Row
-          className="container"
-          style={{ marginTop: '4em', paddingLeft: '1em', paddingRight: '1em' }}
-        >
-          <Col xs={24} sm={6} style={{ paddingRight: 25 }}>
-            <div className="fs-18 fw-600">{t.PRODUCTS.category}</div>
-            <Collapse
-              bordered={false}
-              defaultActiveKey={['1']}
-              expandIcon={({ isActive }) => (
-                <LeftOutlined rotate={isActive ? -90 : 0} />
-              )}
-              ghost
-              expandIconPosition="end"
+      ) : (
+        <div>
+          <Slide>
+            {background.map((slideImage, index) => (
+              <div className="each-slide" key={index}>
+                <div
+                  style={{
+                    backgroundImage: `url(${slideImage})`,
+                    height: '500px',
+                    width: '100%',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'none',
+                    backgroundSize: 'cover'
+                  }}
+                ></div>
+              </div>
+            ))}
+          </Slide>
+          <div className="wrapper-product-container">
+            {/* <div className='background-product mt-0' /> */}
+            <div className="banner-content">
+              <div className="content-text">{t.PRODUCTS.allProductsTitle}</div>
+              <Breadcrumb>
+                <Breadcrumb.Item>{t.PRODUCTS.home}</Breadcrumb.Item>
+                <Breadcrumb.Item>
+                  <a>{t.PRODUCTS.allProducts}</a>
+                </Breadcrumb.Item>
+              </Breadcrumb>
+            </div>
+            <Row
+              className="container"
+              style={{
+                marginTop: '4em',
+                paddingLeft: '1em',
+                paddingRight: '1em'
+              }}
             >
-              {(arrCatrgories || []).map((item) => {
-                return (
-                  <Panel
-                    key={item.id}
-                    header={item.name[locale]}
-                    className="fs-18 fw-500 parent-collaps "
-                  >
-                    {item.children &&
-                      _.isArray(item.children) &&
-                      item.children.map((chil) => {
-                        return (
-                          <p
-                            onClick={() => filterWithCategory(chil.id)}
-                            key={chil.id}
-                            className={`fs-16 fw-400 item-collaps ${
-                              !_.isEmpty(filters.category) &&
-                              filters.category[0] === chil.id
-                                ? 'isSelect'
-                                : ''
-                            }`}
-                          >
-                            {chil.name[locale]}
-                          </p>
-                        )
-                      })}
-                  </Panel>
-                )
-              })}
-            </Collapse>
-            <div className="fs-18 fw-600 mt-30">{t.PRODUCTS.size}</div>
-            <div className="mt-20">
-              <Checkbox.Group
-                style={{ width: '100%' }}
-                value={filters.size}
-                onChange={onFilterSize}
-              >
-                <Row gutter={[0, 10]}>
-                  {(sizes || []).map((item) => {
+              <Col xs={24} sm={6} style={{ paddingRight: 25 }}>
+                <div className="fs-18 fw-600">{t.PRODUCTS.category}</div>
+                <Collapse
+                  bordered={false}
+                  defaultActiveKey={['1']}
+                  expandIcon={({ isActive }) => (
+                    <LeftOutlined rotate={isActive ? -90 : 0} />
+                  )}
+                  ghost
+                  expandIconPosition="end"
+                >
+                  {(arrCatrgories || []).map((item) => {
                     return (
-                      <Col span={12} key={item.id}>
-                        <Checkbox value={item.name}>{item.name}</Checkbox>
-                      </Col>
+                      <Panel
+                        key={item.id}
+                        header={item.name[locale]}
+                        className="fs-18 fw-500 parent-collaps "
+                      >
+                        {item.children &&
+                          _.isArray(item.children) &&
+                          item.children.map((chil) => {
+                            return (
+                              <p
+                                onClick={() => filterWithCategory(chil.id)}
+                                key={chil.id}
+                                className={`fs-16 fw-400 item-collaps ${
+                                  !_.isEmpty(filters.category) &&
+                                  filters.category[0] === chil.id
+                                    ? 'isSelect'
+                                    : ''
+                                }`}
+                              >
+                                {chil.name[locale]}
+                              </p>
+                            )
+                          })}
+                      </Panel>
                     )
                   })}
-                </Row>
-              </Checkbox.Group>
-            </div>
-          </Col>
-          <Col xs={24} sm={18}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <div>
-                {t.PRODUCTS.searchByName}
-                <Input onChange={handleChange} />
-              </div>
-              <div style={{ display: 'grid' }}>
-                {t.PRODUCTS.sortBy}
-                <Select
-                  className="custom-select-sort"
-                  style={{ width: 180 }}
-                  value={optionSort}
-                  onChange={(value) => handleSortByPrice(value)}
+                </Collapse>
+                <div className="fs-18 fw-600 mt-30">{t.PRODUCTS.size}</div>
+                <div className="mt-20">
+                  <Checkbox.Group
+                    style={{ width: '100%' }}
+                    value={filters.size}
+                    onChange={onFilterSize}
+                  >
+                    <Row gutter={[0, 10]}>
+                      {(sizes || []).map((item) => {
+                        return (
+                          <Col span={12} key={item.id}>
+                            <Checkbox value={item.name}>{item.name}</Checkbox>
+                          </Col>
+                        )
+                      })}
+                    </Row>
+                  </Checkbox.Group>
+                </div>
+              </Col>
+              <Col xs={24} sm={18}>
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
-                  <Option value={0}>{t.PRODUCTS.default}</Option>
-                  <Option value={1}>{t.PRODUCTS.lowToHigh}</Option>
-                  <Option value={2}>{t.PRODUCTS.hightToLow}</Option>
-                </Select>
-              </div>
-            </div>
+                  <div>
+                    {t.PRODUCTS.searchByName}
+                    <Input onChange={handleChange} />
+                  </div>
+                  <div style={{ display: 'grid' }}>
+                    {t.PRODUCTS.sortBy}
+                    <Select
+                      className="custom-select-sort"
+                      style={{ width: 180 }}
+                      value={optionSort}
+                      onChange={(value) => handleSortByPrice(value)}
+                    >
+                      <Option value={0}>{t.PRODUCTS.default}</Option>
+                      <Option value={1}>{t.PRODUCTS.lowToHigh}</Option>
+                      <Option value={2}>{t.PRODUCTS.hightToLow}</Option>
+                    </Select>
+                  </div>
+                </div>
 
-            <div className="border-bottom-width" />
-            <List
-              grid={{
-                gutter: [25, 30],
-                xs: 1,
-                sm: 2,
-                md: 3,
-                lg: 3,
-                xl: 3,
-                xxl: 3
-              }}
-              dataSource={productsSort}
-              loading={isFetching}
-              pagination={{
-                defaultPageSize: 15,
-                current: currentPage,
-                onChange: onChangePage
-              }}
-              renderItem={(item) => (
-                <List.Item>
-                  <Category data={item} />
-                </List.Item>
-              )}
-            />
-          </Col>
-        </Row>
-      </div>
+                <div className="border-bottom-width" />
+                <List
+                  grid={{
+                    gutter: [25, 30],
+                    xs: 1,
+                    sm: 2,
+                    md: 3,
+                    lg: 3,
+                    xl: 3,
+                    xxl: 3
+                  }}
+                  dataSource={productsSort}
+                  loading={isFetching}
+                  pagination={{
+                    defaultPageSize: 15,
+                    current: currentPage,
+                    onChange: onChangePage
+                  }}
+                  renderItem={(item) => (
+                    <List.Item>
+                      <Category data={item} />
+                    </List.Item>
+                  )}
+                />
+              </Col>
+            </Row>
+          </div>
+        </div>
+      )}
     </>
   )
 }
