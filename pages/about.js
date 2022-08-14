@@ -57,14 +57,25 @@ export default function About(props) {
                 {background.map((slideImage, index) => (
                   <div className="each-slide" key={index}>
                     <div
-                      style={{
-                        backgroundImage: `url(${slideImage})`,
-                        height: '500px',
-                        width: '100%',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'none',
-                        backgroundSize: 'cover'
-                      }}
+                      style={
+                        index === 0
+                          ? {
+                              backgroundImage: `url(${slideImage})`,
+                              height: '500px',
+                              width: '100%',
+                              backgroundPosition: 'center',
+                              backgroundRepeat: 'no-repeat',
+                              backgroundSize: 'contain'
+                            }
+                          : {
+                              backgroundImage: `url(${slideImage})`,
+                              height: '500px',
+                              width: '100%',
+                              backgroundPosition: 'center',
+                              backgroundRepeat: 'no-repeat',
+                              backgroundSize: 'cover'
+                            }
+                      }
                     ></div>
                   </div>
                 ))}
