@@ -66,8 +66,8 @@ function Category(props) {
             src={data.image[0]}
             alt="Picture of the author"
             width={'100%'}
-            // style={{ height: 350, maxWidth: 350 }}
-            style={{ aspectRatio: '1/1' }}
+            style={{ height: 300, objectFit: 'cover' }}
+            // style={{ aspectRatio: '1/1' }}
           />
         </div>
 
